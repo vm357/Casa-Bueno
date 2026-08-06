@@ -1,0 +1,6 @@
+/* ElevenLabs webfonts
+ * Display: Waldenburg Light (licensed) — substituted with EB Garamond @300.
+ *   See readme.md "Known Gaps". Swap in licensed Waldenburg .woff2 here when available.
+ * Body: Inter — the same family ElevenLabs ships, loaded directly from Google Fonts.
+ */
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter:wght@300..700&display=swap');

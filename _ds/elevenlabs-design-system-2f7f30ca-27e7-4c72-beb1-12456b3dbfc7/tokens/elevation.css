@@ -1,0 +1,6 @@
+/* ElevenLabs — Elevation. Hairline + a single soft-drop tier. */
+:root {
+  --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.04);  /* hovered cards — the only shadow tier */
+  --border-hairline: 1px solid var(--color-hairline);
+  --border-hairline-strong: 1px solid var(--color-hairline-strong);
+}

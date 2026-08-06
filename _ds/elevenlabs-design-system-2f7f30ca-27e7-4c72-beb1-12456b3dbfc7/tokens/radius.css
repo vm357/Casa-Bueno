@@ -1,0 +1,12 @@
+/* ElevenLabs — Border radius scale. Pill CTAs, xl cards. */
+:root {
+  --radius-none: 0px;     /* reserved */
+  --radius-xs: 4px;       /* inline tags */
+  --radius-sm: 6px;       /* compact rows */
+  --radius-md: 8px;       /* form inputs */
+  --radius-lg: 12px;      /* compact cards */
+  --radius-xl: 16px;      /* feature cards, pricing tiers */
+  --radius-xxl: 24px;     /* gradient orb cards (extra-soft) */
+  --radius-pill: 9999px;  /* all CTA buttons, badges */
+  --radius-full: 9999px;  /* voice icon circles, avatars */
+}

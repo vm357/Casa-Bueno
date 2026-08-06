@@ -1,0 +1,28 @@
+/* Casa Bueno — global base + responsive grid collapse. Shared across pages. */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a { -webkit-tap-highlight-color: transparent; }
+::selection { background: var(--color-ink); color: var(--color-on-primary); }
+
+@media (max-width: 1000px) {
+  .cb-searchbar { grid-template-columns: 1fr 1fr !important; }
+  .cb-searchbar > button { grid-column: 1 / -1; }
+  .cb-hero-split, .cb-about, .cb-cash, .cb-contact, .cb-reloc-split { grid-template-columns: 1fr !important; }
+  .cb-hero-panel { height: 300px !important; }
+  .cb-3up { grid-template-columns: 1fr 1fr !important; }
+  .cb-stat-grid { grid-template-columns: 1fr 1fr !important; gap: var(--space-xl) !important; }
+  .cb-footer-grid { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 640px) {
+  .cb-nav-desktop { display: none !important; }
+  .cb-searchbar { grid-template-columns: 1fr !important; }
+  .cb-3up { grid-template-columns: 1fr !important; }
+  .cb-footer-grid { grid-template-columns: 1fr !important; }
+}

@@ -1,0 +1,37 @@
+/* ElevenLabs — Typography tokens
+ * Display: Waldenburg Light @300 (substituted EB Garamond). Never bold.
+ * Body: Inter @400/500 with subtle +0.15–0.18px tracking.
+ */
+:root {
+  /* Families */
+  --font-display: 'EB Garamond', 'Times New Roman', serif;  /* Waldenburg substitute */
+  --font-body: 'Inter', sans-serif;
+
+  /* Weights */
+  --weight-display: 300;   /* editorial signature — never heavier */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* Display scale — Waldenburg Light @300 -------------------------------- */
+  --type-display-mega-size: 64px;   --type-display-mega-lh: 1.05;  --type-display-mega-ls: -1.92px;
+  --type-display-xl-size: 48px;     --type-display-xl-lh: 1.08;    --type-display-xl-ls: -0.96px;
+  --type-display-lg-size: 36px;     --type-display-lg-lh: 1.17;    --type-display-lg-ls: -0.36px;
+  --type-display-md-size: 32px;     --type-display-md-lh: 1.13;    --type-display-md-ls: -0.32px;
+  --type-display-sm-size: 24px;     --type-display-sm-lh: 1.2;     --type-display-sm-ls: 0;
+
+  /* Title scale — Inter @500 -------------------------------------------- */
+  --type-title-md-size: 20px;  --type-title-md-lh: 1.35;  --type-title-md-ls: 0;
+  --type-title-sm-size: 18px;  --type-title-sm-lh: 1.44;  --type-title-sm-ls: 0.18px;
+
+  /* Body scale — Inter -------------------------------------------------- */
+  --type-body-md-size: 16px;     --type-body-md-lh: 1.5;   --type-body-md-ls: 0.16px;
+  --type-body-strong-size: 16px; --type-body-strong-lh: 1.5; --type-body-strong-ls: 0.16px;
+  --type-body-sm-size: 15px;     --type-body-sm-lh: 1.47;  --type-body-sm-ls: 0.15px;
+
+  /* Detail -------------------------------------------------------------- */
+  --type-caption-size: 14px;          --type-caption-lh: 1.5;  --type-caption-ls: 0;
+  --type-caption-up-size: 12px;       --type-caption-up-lh: 1.4; --type-caption-up-ls: 0.96px;
+  --type-button-size: 15px;           --type-button-lh: 1.0;   --type-button-ls: 0;
+  --type-nav-link-size: 15px;         --type-nav-link-lh: 1.4; --type-nav-link-ls: 0;
+}

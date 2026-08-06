@@ -1,0 +1,44 @@
+/* ElevenLabs — Color tokens
+ * Photographic, not chromatic. Off-white canvas, warm near-black ink.
+ * The ONLY "color" moments are soft pastel atmospheric gradient orbs.
+ */
+:root {
+  /* Brand & action ----------------------------------------------------- */
+  --color-primary: #292524;          /* near-black ink pill — the sole CTA color */
+  --color-primary-active: #0c0a09;   /* press state */
+
+  /* Surface ------------------------------------------------------------ */
+  --color-canvas: #f5f5f5;           /* off-white page floor */
+  --color-canvas-soft: #fafafa;      /* lighter alternating band */
+  --color-canvas-deep: #0c0a09;      /* rare dark hero canvas */
+  --color-surface-card: #ffffff;     /* pure white card */
+  --color-surface-strong: #f0efed;   /* badges, voice-icon plates */
+  --color-surface-dark: #0c0a09;     /* dark hero / CTA band */
+  --color-surface-dark-elevated: #1c1917; /* cards on dark canvas */
+
+  /* Hairlines ---------------------------------------------------------- */
+  --color-hairline: #e7e5e4;         /* default 1px divider */
+  --color-hairline-soft: #f0efed;    /* lighter divider */
+  --color-hairline-strong: #d6d3d1;  /* stronger panel outline */
+
+  /* Text --------------------------------------------------------------- */
+  --color-ink: #0c0a09;              /* display, primary text */
+  --color-body: #4e4e4e;             /* default running text */
+  --color-body-strong: #292524;      /* emphasis */
+  --color-muted: #777169;            /* sub-titles */
+  --color-muted-soft: #a8a29e;       /* disabled text */
+  --color-on-primary: #ffffff;       /* white on ink pill */
+  --color-on-dark: #ffffff;          /* white on dark hero */
+  --color-on-dark-soft: #a8a29e;     /* muted off-white on dark */
+
+  /* Atmospheric gradient stops (signature — decoration only) ----------- */
+  --color-gradient-mint: #a7e5d3;
+  --color-gradient-peach: #f4c5a8;
+  --color-gradient-lavender: #c8b8e0;
+  --color-gradient-sky: #a8c8e8;
+  --color-gradient-rose: #e8b8c4;
+
+  /* Semantic ----------------------------------------------------------- */
+  --color-success: #16a34a;
+  --color-error: #dc2626;
+}
