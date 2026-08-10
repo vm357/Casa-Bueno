@@ -3,16 +3,38 @@
 const { Button, Badge } = window.ElevenLabsDesignSystem_2f7f30;
 
 function ListingsHeader({ onSearch }) {
+  const [up, setUp] = React.useState(() => typeof document !== 'undefined' && document.hidden);
+  React.useEffect(() => {
+    const raf = requestAnimationFrame(() => setUp(true));
+    const t = setTimeout(() => setUp(true), 120);
+    return () => { cancelAnimationFrame(raf); clearTimeout(t); };
+  }, []);
+  const rise = (d) => ({
+    opacity: up ? 1 : 0, transform: up ? 'none' : 'translateY(18px)',
+    transition: `opacity .8s ease-out ${d}s, transform .8s ease-out ${d}s`,
+  });
   return (
     <section style={{ position: 'relative', background: 'var(--color-canvas)', overflow: 'hidden', borderBottom: '1px solid var(--color-hairline)' }}>
-      <div aria-hidden style={{
+      <style>{`
+@keyframes cbPulseSky{0%,100%{transform:translate(0,0) scale(1);opacity:.6}50%{transform:translate(-46px,34px) scale(1.12);opacity:.9}}
+@keyframes cbPulseMint{0%,100%{transform:translate(0,0) scale(1.08);opacity:.36}50%{transform:translate(52px,-30px) scale(.94);opacity:.62}}
+.cb-ls-orb-a{animation:cbPulseSky 24s ease-in-out infinite}
+.cb-ls-orb-b{animation:cbPulseMint 24s ease-in-out infinite;animation-delay:-12s}
+@media (prefers-reduced-motion: reduce){.cb-ls-orb-a,.cb-ls-orb-b{animation:none}}
+`}</style>
+      <div aria-hidden className="cb-ls-orb-a" style={{
         position: 'absolute', right: '-6%', top: '-40%', width: 640, height: 640,
-        background: `radial-gradient(circle at center, ${window.ORB_STOPS.sky} 0%, rgba(245,245,245,0) 64%)`,
-        filter: 'blur(30px)', opacity: 0.8, pointerEvents: 'none',
+        background: `radial-gradient(circle at center, ${window.ORB_STOPS.sky} 0%, ${window.ORB_STOPS.sky} 22%, rgba(245,245,245,0) 72%)`,
+        filter: 'blur(30px)', opacity: 0.68, pointerEvents: 'none',
+      }} />
+      <div aria-hidden className="cb-ls-orb-b" style={{
+        position: 'absolute', left: '-10%', bottom: '-55%', width: 560, height: 560,
+        background: `radial-gradient(circle at center, ${window.ORB_STOPS.mint} 0%, ${window.ORB_STOPS.mint} 22%, rgba(245,245,245,0) 72%)`,
+        filter: 'blur(34px)', opacity: 0.42, pointerEvents: 'none',
       }} />
       <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: '88px var(--space-lg) var(--space-xxl)', position: 'relative', display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
-        <SectionHead eyebrow="The listings" title="Homes across New Jersey." intro="Browse what's on the market now across Montclair, Millburn, the Oranges and beyond. New listings added every week." maxWidth={620} />
-        <SearchBar onSearch={onSearch} />
+        <div style={rise(0)}><SectionHead eyebrow="The listings" title="Homes across New Jersey." intro="Browse what's on the market now across Montclair, Millburn, the Oranges and beyond. New listings added every week." maxWidth={620} /></div>
+        <div style={rise(0.14)}><SearchBar onSearch={onSearch} /></div>
       </div>
     </section>
   );
@@ -98,7 +120,10 @@ function Pagination({ page, total, onGo }) {
 
 function ListingsGrid({ search }) {
   const [sort, setSort] = React.useState('featured');
-  const [active, setActive] = React.useState('All homes');
+  const [active, setActive] = React.useState(() => {
+    const h = (typeof location !== 'undefined' ? location.hash : '').replace('#', '');
+    return h === 'open-house' ? 'Open house' : 'All homes';
+  });
   const [page, setPage] = React.useState(1);
   const topRef = React.useRef(null);
   const num = (p) => Number(p.replace(/[^0-9]/g, ''));
@@ -127,6 +152,13 @@ function ListingsGrid({ search }) {
   const totalPages = Math.max(1, Math.ceil(items.length / PER_PAGE));
   // Reset to page 1 whenever the result set changes.
   React.useEffect(() => { setPage(1); }, [sort, active, search]);
+  React.useEffect(() => {
+    const onHash = () => {
+      if (location.hash.replace('#', '') === 'open-house') setActive('Open house');
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
   const safePage = Math.min(page, totalPages);
   const pageItems = items.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
   const go = (p) => {
@@ -137,8 +169,11 @@ function ListingsGrid({ search }) {
     }
   };
   return (
-    <section style={{ background: 'var(--color-canvas)' }}>
-      <div ref={topRef} style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-xxl) var(--space-lg) var(--space-section)', display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
+    <section className="cb-band" style={{ background: 'var(--color-canvas)' }}>
+      <PageBloom hue="lavender" x="95%" y="8%" size={680} opacity={0.46} />
+      <PageBloom hue="peach" x="5%" y="52%" size={620} opacity={0.4} />
+      <PageBloom hue="mint" x="90%" y="92%" size={600} opacity={0.4} />
+      <div id="open-house" ref={topRef} style={{ scrollMarginTop: 88, maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-xxl) var(--space-lg) var(--space-section)', display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
         <FilterRow count={items.length} sort={sort} setSort={setSort} active={active} setActive={setActive} />
         {totalPages > 1 && <Pagination page={safePage} total={totalPages} onGo={go} />}
         {items.length === 0 ? (
@@ -159,13 +194,15 @@ function ListingsGrid({ search }) {
 
 function ListingsCta() {
   return (
-    <section style={{ background: 'var(--color-canvas-soft)', borderTop: '1px solid var(--color-hairline)' }}>
+    <section id="property-updates" className="cb-band" style={{ scrollMarginTop: 88, background: 'var(--color-canvas-soft)', borderTop: '1px solid var(--color-hairline)' }}>
+      <PageBloom hue="rose" x="12%" y="22%" size={580} opacity={0.46} />
+      <PageBloom hue="sky" x="90%" y="80%" size={560} opacity={0.42} />
       <div style={{ maxWidth: 760, margin: '0 auto', padding: 'var(--space-section) var(--space-lg)', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-lg)' }}>
         <Eyebrow>Don't see it yet?</Eyebrow>
         <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 'var(--weight-display)', fontSize: 'var(--type-display-lg-size)', lineHeight: 1.12, letterSpacing: 'var(--type-display-lg-ls)', color: 'var(--color-ink)', textWrap: 'balance' }}>Tell us what you're looking for, and we'll find it.</h2>
         <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-md-size)', lineHeight: 1.5, color: 'var(--color-body)', maxWidth: 480, textWrap: 'pretty' }}>Many of our best homes sell before they hit the open market. Sign up for property updates matched to your search.</p>
         <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <Button href="index.html#contact" variant="primary" size="lg">Get property updates</Button>
+          <span className="cb-cta-aura"><Button href="index.html#contact" variant="primary" size="lg">Get property updates</Button></span>
           <Button href="index.html#contact" variant="outline" size="lg">Talk to an agent</Button>
         </div>
       </div>
@@ -178,9 +215,11 @@ function ListingsPage() {
   return (
     <React.Fragment>
       <NavBar active="Listings" />
+      <main id="cb-main">
       <ListingsHeader onSearch={setSearch} />
       <ListingsGrid search={search} />
       <ListingsCta />
+      </main>
       <Footer />
     </React.Fragment>
   );

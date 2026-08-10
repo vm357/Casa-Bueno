@@ -5,12 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Listings — Casa Bueno</title>
 
+  <meta name="description" content="Search homes for sale across New Jersey — Essex, Somerset, Middlesex counties and more. Filter by town, price, bedrooms, and baths with NJ Realtor Vanessa Bueno.">
+  <link rel="canonical" href="https://sellwithbueno.com/Listings.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Casa Bueno Group">
+  <meta property="og:title" content="Listings — Casa Bueno">
+  <meta property="og:description" content="Search homes for sale across New Jersey — Essex, Somerset, Middlesex counties and more. Filter by town, price, bedrooms, and baths with NJ Realtor Vanessa Bueno.">
+  <meta property="og:url" content="https://sellwithbueno.com/Listings.html">
+  <meta property="og:image" content="https://sellwithbueno.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Listings — Casa Bueno">
+  <meta name="twitter:description" content="Search homes for sale across New Jersey — Essex, Somerset, Middlesex counties and more. Filter by town, price, bedrooms, and baths with NJ Realtor Vanessa Bueno.">
+  <meta name="twitter:image" content="https://sellwithbueno.com/assets/og-image.png">
+
+  <link rel="icon" type="image/png" href="assets/favicon-512.png">
+  <link rel="apple-touch-icon" href="assets/favicon-512.png">
   <link rel="stylesheet" href="_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/fonts.css">
+
   <link rel="stylesheet" href="_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/colors.css">
+
   <link rel="stylesheet" href="_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/typography.css">
+
   <link rel="stylesheet" href="_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/spacing.css">
+
   <link rel="stylesheet" href="_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/radius.css">
+
   <link rel="stylesheet" href="_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/elevation.css">
+
   <link rel="stylesheet" href="_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/styles.css">
   <link rel="stylesheet" href="app/site.css">
 
@@ -19,16 +42,19 @@
       <svg width="40%" height="40%" viewBox="0 0 24 24" fill="none" stroke="#0c0a09" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
     </div>
   </template>
+  <script src="app/analytics.js"></script>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
 </head>
 <body>
   <div id="cb-root"></div>
 
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
   <script src="_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/_ds_bundle.js"></script>
 
+  <script src="app/listings-data.js"></script>
   <script type="text/babel" src="app/shared.jsx"></script>
   <script type="text/babel" src="app/listings.jsx"></script>
 </body>

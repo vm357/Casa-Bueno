@@ -1,0 +1,9 @@
+# Extensionless URLs -> the built pages.
+/about        /About.html        200
+/listings     /Listings.html     200
+/reviews      /Reviews.html      200
+/relocation   /Relocation.html   200
+/buy-sell     /Buy-Sell.html     200
+/privacy      /Privacy.html      200
+/terms        /Terms.html        200
+/accessibility /Accessibility.html 200

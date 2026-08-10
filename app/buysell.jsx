@@ -12,28 +12,72 @@ const BsToolIcon = <svg width="20" height="20" viewBox="0 0 24 24" fill="none" s
 /* --------------------------------------------------------------------- hero --- */
 
 function BuySellHero() {
+  const [up, setUp] = React.useState(() => typeof document !== 'undefined' && document.hidden);
+  React.useEffect(() => {
+    const raf = requestAnimationFrame(() => setUp(true));
+    const t = setTimeout(() => setUp(true), 120);
+    const onVis = () => { if (document.hidden) setUp(true); };
+    document.addEventListener('visibilitychange', onVis);
+    return () => { cancelAnimationFrame(raf); clearTimeout(t); document.removeEventListener('visibilitychange', onVis); };
+  }, []);
+  const rise = (d) => ({
+    opacity: up ? 1 : 0, transform: up ? 'none' : 'translateY(18px)',
+    transition: `opacity .8s ease-out ${d}s, transform .8s ease-out ${d}s`,
+  });
   return (
     <section style={{ position: 'relative', background: 'var(--color-canvas)', overflow: 'hidden' }}>
-      <div aria-hidden style={{
+      <style>{`
+@keyframes cbBreatheA{0%,100%{transform:translateX(-50%) scale(1);opacity:.78}50%{transform:translateX(-50%) scale(1.1);opacity:.95}}
+@keyframes cbBreatheB{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.12);opacity:.72}}
+.cb-bs-orb-a{animation:cbBreatheA 14s ease-in-out infinite}
+.cb-bs-orb-b{animation:cbBreatheB 17s ease-in-out infinite}
+.cb-lift{transition:transform .28s ease-out,box-shadow .28s ease-out;border-radius:var(--radius-xxl)}
+.cb-lift:hover{transform:translateY(-4px);box-shadow:var(--shadow-soft)}
+.cb-lift > *{height:100%}
+.cb-card-aura{position:relative;display:flex;width:100%;border-radius:var(--radius-xl);overflow:hidden;background:var(--color-surface-card);transition:transform .28s ease-out,box-shadow .28s ease-out}
+.cb-card-aura::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .35s ease-out;background:radial-gradient(120% 90% at 85% 0%,var(--cb-aura) 0%,rgba(255,255,255,0) 62%)}
+.cb-card-aura:hover::before{opacity:.85}
+.cb-card-aura:hover{transform:translateY(-4px);box-shadow:var(--shadow-soft)}
+.cb-card-aura > *{position:relative;flex:1}
+.cb-step-hover{transition:transform .25s ease-out}
+.cb-step-hover:hover{transform:translateY(-3px)}
+.cb-step-num{display:inline-block;transition:opacity .25s ease-out,transform .25s ease-out;opacity:.55}
+.cb-step-hover:hover .cb-step-num{opacity:1;transform:translateY(-2px)}
+.cb-light-pill,.cb-light-pill:hover,.cb-light-pill:active,.cb-light-pill:focus{background:var(--color-on-dark) !important;color:var(--color-ink) !important}
+.cb-light-pill{transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s ease-out}
+.cb-light-pill:hover{transform:scale(1.035);box-shadow:0 0 0 6px rgba(255,255,255,0.07)}
+.cb-light-pill:active{transform:scale(1)}
+@media (prefers-reduced-motion: reduce){.cb-bs-orb-a,.cb-bs-orb-b{animation:none}.cb-lift:hover,.cb-card-aura:hover,.cb-light-pill:hover,.cb-step-hover:hover,.cb-step-hover:hover .cb-step-num{transform:none}}
+`}</style>
+      <div aria-hidden className="cb-bs-orb-a" style={{
         position: 'absolute', left: '82%', top: '-12%', width: 700, height: 700,
-        background: `radial-gradient(circle at center, ${window.ORB_STOPS.peach} 0%, rgba(245,245,245,0) 64%)`,
-        filter: 'blur(34px)', opacity: 0.85, transform: 'translateX(-50%)', pointerEvents: 'none',
+        background: `radial-gradient(circle at center, ${window.ORB_STOPS.peach} 0%, ${window.ORB_STOPS.peach} 22%, rgba(245,245,245,0) 72%)`,
+        filter: 'blur(34px)', opacity: 0.72, transform: 'translateX(-50%)', pointerEvents: 'none',
+      }} />
+      <div aria-hidden className="cb-bs-orb-b" style={{
+        position: 'absolute', left: '-10%', top: '48%', width: 600, height: 600,
+        background: `radial-gradient(circle at center, ${window.ORB_STOPS.sky} 0%, ${window.ORB_STOPS.sky} 22%, rgba(245,245,245,0) 72%)`,
+        filter: 'blur(38px)', opacity: 0.46, pointerEvents: 'none',
       }} />
       <div className="cb-reloc-split" style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: '96px var(--space-lg) var(--space-section)', position: 'relative', display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 'var(--space-xxl)', alignItems: 'center' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-            <Badge style={{ whiteSpace: 'nowrap' }}>Buying &amp; selling</Badge>
-            <h1 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 'var(--weight-display)', fontSize: 'clamp(40px, 5.5vw, 64px)', lineHeight: 1.05, letterSpacing: '-1.6px', color: 'var(--color-ink)', textWrap: 'balance' }}>Selling or buying, with a steady hand.</h1>
-            <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--type-title-md-size)', lineHeight: 1.55, color: 'var(--color-body)', maxWidth: 480, textWrap: 'pretty' }}>From an as-is cash sale to a full-market listing or your very first home — clear guidance at every page, across New Jersey.</p>
+            <div style={rise(0)}><Badge style={{ whiteSpace: 'nowrap' }}>Buying &amp; selling</Badge></div>
+            <h1 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 'var(--weight-display)', fontSize: 'clamp(40px, 5.5vw, 64px)', lineHeight: 1.05, letterSpacing: '-1.6px', color: 'var(--color-ink)', textWrap: 'balance', ...rise(0.08) }}>Selling or Buying, with a steady hand.</h1>
+            <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--type-title-md-size)', lineHeight: 1.55, color: 'var(--color-body)', maxWidth: 480, textWrap: 'pretty', ...rise(0.16) }}>From an as-is cash sale to a full-market listing or your very first home — clear guidance at every page, across New Jersey.</p>
           </div>
-          <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap' }}>
-            <Button href="index.html#contact" variant="primary" size="lg">Get a cash offer</Button>
+          <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', ...rise(0.24) }}>
+            <span className="cb-cta-aura"><Button href="index.html#contact" variant="primary" size="lg">Get a cash offer</Button></span>
             <Button href="Listings.html" variant="outline" size="lg">Browse listings</Button>
           </div>
         </div>
         <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 'var(--space-base)' }}>
-          <GradientOrbCard variant="peach" title="Sellers" align="left" style={{ minHeight: 180 }}>Cash offers, as-is sales, and full-service listings priced to move.</GradientOrbCard>
-          <GradientOrbCard variant="mint" title="Buyers" align="left" style={{ minHeight: 180 }}>First-home guidance and a calm, well-explained path to the keys.</GradientOrbCard>
+          <div style={rise(0.32)}><div className="cb-lift">
+            <GradientOrbCard variant="peach" title="Sellers" align="left" style={{ minHeight: 180 }}>Cash offers, as-is sales, and full-service listings priced to move.</GradientOrbCard>
+          </div></div>
+          <div style={rise(0.4)}><div className="cb-lift">
+            <GradientOrbCard variant="mint" title="Buyers" align="left" style={{ minHeight: 180 }}>First-home guidance and a calm, well-explained path to the keys.</GradientOrbCard>
+          </div></div>
         </div>
       </div>
     </section>
@@ -41,6 +85,28 @@ function BuySellHero() {
 }
 
 /* ----------------------------------------------------------------- services --- */
+
+function Reveal({ children, delay = 0, y = 16, className, style = {} }) {
+  const ref = React.useRef(null);
+  const [seen, setSeen] = React.useState(() => typeof document !== 'undefined' && document.hidden);
+  React.useEffect(() => {
+    if (!ref.current || document.hidden || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setSeen(true); return; }
+    const io = new IntersectionObserver(es => {
+      if (es.some(e => e.isIntersecting)) { setSeen(true); io.disconnect(); }
+    }, { threshold: 0.2 });
+    io.observe(ref.current);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} className={className} style={{
+      opacity: seen ? 1 : 0, transform: seen ? 'none' : `translateY(${y}px)`,
+      transition: `opacity .75s ease-out ${delay}s, transform .75s ease-out ${delay}s`,
+      ...style,
+    }}>{children}</div>
+  );
+}
+
+const CARD_HUES = ['peach', 'mint', 'sky', 'lavender'];
 
 function BuySellServices() {
   const items = [
@@ -50,17 +116,23 @@ function BuySellServices() {
     { icon: BsToolIcon, eyebrow: 'For investors', title: 'Build your portfolio', body: 'Off-market deals, fixer-uppers, and cash-flow rentals across New Jersey. We bring the numbers, the comps, and the inside track to investors buying to hold or flip.', cta: 'See investor deals', href: 'index.html#contact' },
   ];
   return (
-    <section style={{ background: 'var(--color-canvas-soft)', borderTop: '1px solid var(--color-hairline)', borderBottom: '1px solid var(--color-hairline)' }}>
+    <section id="what-we-do" className="cb-band" style={{ background: 'var(--color-canvas-soft)', borderTop: '1px solid var(--color-hairline)', borderBottom: '1px solid var(--color-hairline)' }}>
+      <PageBloom hue="mint" x="92%" y="16%" size={660} opacity={0.5} />
+      <PageBloom hue="rose" x="4%" y="84%" size={600} opacity={0.42} />
       <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-section) var(--space-lg)', display: 'flex', flexDirection: 'column', gap: 'var(--space-xxl)' }}>
-        <SectionHead eyebrow="What we do" title="Four ways we open doors." intro="Whether you're cashing out, listing for the most, buying your first place, or growing a portfolio — the work is the same: clear guidance and a steady hand." maxWidth={620} />
+        <Reveal><SectionHead eyebrow="What we do" title="Four ways we open doors." intro="Whether you're cashing out, listing for the most, buying your first place, or growing a portfolio — the work is the same: clear guidance and a steady hand." maxWidth={620} /></Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 'var(--space-lg)' }} className="cb-3up">
-          {items.map((it) => (
-            <FeatureCard key={it.title} icon={it.icon} eyebrow={it.eyebrow} title={it.title} style={{ gap: 'var(--space-base)' }}>
-              <span style={{ display: 'block' }}>{it.body}</span>
-              <span style={{ marginTop: 'var(--space-xs)', display: 'inline-block' }}>
-                <Button href={it.href} variant="tertiary" style={{ fontWeight: 'var(--weight-medium)' }}>{it.cta} →</Button>
-              </span>
-            </FeatureCard>
+          {items.map((it, i) => (
+            <Reveal key={it.title} delay={0.1 + i * 0.1} style={{ display: 'flex' }}>
+              <div className="cb-card-aura" style={{ '--cb-aura': window.ORB_STOPS[CARD_HUES[i % 4]] }}>
+                <FeatureCard icon={it.icon} eyebrow={it.eyebrow} title={it.title} style={{ gap: 'var(--space-base)', background: 'transparent' }}>
+                  <span style={{ display: 'block' }}>{it.body}</span>
+                  <span style={{ marginTop: 'var(--space-xs)', display: 'inline-block' }}>
+                    <Button href={it.href} variant="tertiary" style={{ fontWeight: 'var(--weight-medium)' }}>{it.cta} →</Button>
+                  </span>
+                </FeatureCard>
+              </div>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -77,9 +149,12 @@ function BuySellCashOffer() {
     'Choose your closing date — we handle the rest',
   ];
   return (
-    <section style={{ background: 'var(--color-canvas)' }}>
+    <section className="cb-band" style={{ background: 'var(--color-canvas)' }}>
+      <PageBloom hue="lavender" x="6%" y="16%" size={660} opacity={0.5} />
+      <PageBloom hue="mint" x="96%" y="86%" size={600} opacity={0.42} />
       <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-section) var(--space-lg)' }}>
-        <div style={{
+        <div id="cash-offer" style={{
+          scrollMarginTop: 96,
           position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-xxl)',
           background: 'var(--color-surface-dark)', color: 'var(--color-on-dark)',
           padding: 'clamp(40px, 6vw, 72px)',
@@ -90,20 +165,24 @@ function BuySellCashOffer() {
             background: `radial-gradient(circle at center, ${window.ORB_STOPS.peach} 0%, rgba(12,10,9,0) 64%)`,
             filter: 'blur(20px)', opacity: 0.55,
           }} />
-          <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-            <Badge tone="dark" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>Cash offer</Badge>
+          <Reveal style={{ position: 'relative' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
+            <div><Badge tone="dark" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>Cash offer</Badge></div>
             <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 'var(--weight-display)', fontSize: 'var(--type-display-xl-size)', lineHeight: 1.08, letterSpacing: 'var(--type-display-xl-ls)', color: 'var(--color-on-dark)', textWrap: 'balance' }}>Sell as-is, for cash, on your timeline.</h2>
             <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-md-size)', lineHeight: 1.5, color: 'var(--color-on-dark-soft)', maxWidth: 420, textWrap: 'pretty' }}>Tell us about your home and receive a competitive, no-obligation offer. No repairs, no staging, no waiting on the market.</p>
             <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap' }}>
-              <Button href="index.html#contact" variant="primary" size="lg" style={{ background: 'var(--color-on-dark)', color: 'var(--color-ink)' }}>Request my offer</Button>
+              <span className="cb-cta-aura"><Button href="index.html#contact" variant="primary" size="lg" className="cb-light-pill" style={{ background: 'var(--color-on-dark)', color: 'var(--color-ink)' }}>Request my offer</Button></span>
             </div>
           </div>
+          </Reveal>
           <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 'var(--space-base)' }}>
             {steps.map((s, i) => (
-              <div key={i} style={{ display: 'flex', gap: 'var(--space-base)', alignItems: 'flex-start', paddingBottom: 'var(--space-base)', borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.12)' : 'none' }}>
+              <Reveal key={i} delay={0.15 + i * 0.14}>
+              <div style={{ display: 'flex', gap: 'var(--space-base)', alignItems: 'flex-start', paddingBottom: 'var(--space-base)', borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.12)' : 'none' }}>
                 <span style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 28, color: 'var(--color-on-dark)', lineHeight: 1, minWidth: 36 }}>{i + 1}</span>
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-md-size)', lineHeight: 1.45, color: 'var(--color-on-dark)' }}>{s}</span>
               </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -115,8 +194,8 @@ function BuySellCashOffer() {
 /* ------------------------------------------------------------- buyer steps --- */
 
 const BsStep = ({ n, title, body }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
-    <span style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 40, lineHeight: 1, color: 'var(--color-ink)' }}>{n}</span>
+  <div className="cb-step-hover" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+    <span className="cb-step-num" style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 40, lineHeight: 1, color: 'var(--color-ink)' }}>{n}</span>
     <h3 style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--type-title-md-size)', fontWeight: 'var(--weight-medium)', color: 'var(--color-ink)' }}>{title}</h3>
     <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-md-size)', lineHeight: 1.5, color: 'var(--color-body)', textWrap: 'pretty' }}>{body}</p>
   </div>
@@ -129,11 +208,13 @@ function BuyerJourney() {
     { n: '03', title: 'Offer and close', body: 'We write a smart offer, negotiate hard on your behalf, and walk you through inspection, appraisal, and the keys.' },
   ];
   return (
-    <section style={{ background: 'var(--color-canvas-soft)', borderTop: '1px solid var(--color-hairline)', borderBottom: '1px solid var(--color-hairline)' }}>
+    <section className="cb-band" style={{ background: 'var(--color-canvas-soft)', borderTop: '1px solid var(--color-hairline)', borderBottom: '1px solid var(--color-hairline)' }}>
+      <PageBloom hue="rose" x="90%" y="20%" size={640} opacity={0.46} />
+      <PageBloom hue="sky" x="6%" y="88%" size={600} opacity={0.44} />
       <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-section) var(--space-lg)', display: 'flex', flexDirection: 'column', gap: 'var(--space-xxl)' }}>
-        <SectionHead eyebrow="Buying a home" title="A first home, without the overwhelm." intro="Most first-time buyers feel lost by the paperwork. We make every step legible." maxWidth={560} />
+        <Reveal><SectionHead eyebrow="Buying a home" title="A first home, without the overwhelm." intro="Most first-time buyers feel lost by the paperwork. We make every step legible." maxWidth={560} /></Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 'var(--space-xxl)' }} className="cb-3up">
-          {steps.map((s) => <BsStep key={s.n} {...s} />)}
+          {steps.map((s, i) => <Reveal key={s.n} delay={0.12 + i * 0.12}><BsStep {...s} /></Reveal>)}
         </div>
       </div>
     </section>
@@ -144,15 +225,19 @@ function BuyerJourney() {
 
 function BuySellCta() {
   return (
-    <section style={{ background: 'var(--color-canvas)' }}>
+    <section className="cb-band" style={{ background: 'var(--color-canvas)' }}>
+      <PageBloom hue="peach" x="14%" y="24%" size={580} opacity={0.44} />
+      <PageBloom hue="lavender" x="88%" y="82%" size={560} opacity={0.4} />
       <div style={{ maxWidth: 760, margin: '0 auto', padding: 'var(--space-section) var(--space-lg)', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-lg)' }}>
-        <Eyebrow>Ready when you are</Eyebrow>
-        <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 'var(--weight-display)', fontSize: 'var(--type-display-lg-size)', lineHeight: 1.12, letterSpacing: 'var(--type-display-lg-ls)', color: 'var(--color-ink)', textWrap: 'balance' }}>Let's talk about your next move.</h2>
-        <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-md-size)', lineHeight: 1.5, color: 'var(--color-body)', maxWidth: 480, textWrap: 'pretty' }}>Selling, buying, or just weighing your options — a short conversation is the best place to start, no obligation.</p>
+        <Reveal><Eyebrow>Ready when you are</Eyebrow></Reveal>
+        <Reveal delay={0.08}><h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 'var(--weight-display)', fontSize: 'var(--type-display-lg-size)', lineHeight: 1.12, letterSpacing: 'var(--type-display-lg-ls)', color: 'var(--color-ink)', textWrap: 'balance' }}>Let's talk about your next move.</h2></Reveal>
+        <Reveal delay={0.16}><p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-md-size)', lineHeight: 1.5, color: 'var(--color-body)', maxWidth: 480, textWrap: 'pretty' }}>Selling, buying, or just weighing your options — a short conversation is the best place to start, no obligation.</p></Reveal>
+        <Reveal delay={0.24}>
         <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <Button href="index.html#contact" variant="primary" size="lg">Get in touch</Button>
+          <span className="cb-cta-aura"><Button href="index.html#contact" variant="primary" size="lg">Get in touch</Button></span>
           <Button href="Listings.html" variant="outline" size="lg">Browse listings</Button>
         </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -164,11 +249,13 @@ function BuySellPage() {
   return (
     <React.Fragment>
       <NavBar active="Buy/Sell" />
+      <main id="cb-main">
       <BuySellHero />
       <BuySellServices />
       <BuySellCashOffer />
       <BuyerJourney />
       <BuySellCta />
+      </main>
       <Footer />
     </React.Fragment>
   );
