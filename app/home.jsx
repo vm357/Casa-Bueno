@@ -111,9 +111,6 @@ const HERO_CLIPS = [
   'uploads/17224730-hd_1920_1080_30fps.mp4',
 ];
 
-const HERO_POSTERS = window.CB_LISTINGS.filter(l => l.img).slice(0, HERO_CLIPS.length)
-  .map(l => window.IDX_PHOTO + l.img + '/c118');
-
 function HeroReel({ index }) {
   const refs = React.useRef([]);
   const playing = React.useRef(null);
@@ -193,7 +190,7 @@ function HeroReel({ index }) {
   return (
     <div aria-hidden style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: 'var(--color-surface-dark)' }}>
       {HERO_CLIPS.map((src, i) => (
-        <video key={src} ref={el => refs.current[i] = el} src={i === 0 ? src : undefined} poster={HERO_POSTERS[i]} muted loop playsInline autoPlay={!CB_REDUCED_MOTION} preload={i === 0 ? 'auto' : 'none'} style={{
+        <video key={src} ref={el => refs.current[i] = el} src={i === 0 ? src : undefined} muted loop playsInline autoPlay={!CB_REDUCED_MOTION} preload={i === 0 ? 'auto' : 'none'} style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
           opacity: i === index ? 1 : 0, transition: 'opacity 1.4s ease',
         }}></video>
