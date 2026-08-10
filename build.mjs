@@ -39,6 +39,12 @@ for (const file of jsx) {
     loader: { '.jsx': 'jsx' },
     jsx: 'transform',
     bundle: false,
+    // Each page loads shared.jsx plus its own file. Babel gives every
+    // type="text/babel" script its own scope, so both can declare
+    // `const { Button } = ...`; plain scripts share one global scope and would
+    // collide. 'iife' restores the per-file scope. Anything shared between
+    // files is passed through `window` explicitly.
+    format: 'iife',
     minify: true,
     target: ['es2019'],
     legalComments: 'none',
