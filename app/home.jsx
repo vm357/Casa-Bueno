@@ -115,8 +115,6 @@ function HeroReel({ index }) {
   const refs = React.useRef([]);
   const playing = React.useRef(null);
 
-  React.useEffect(() => { cbPrimeClips(refs.current); }, []);
-
   /* Only the current clip (and the next one, warming) is allowed to download.
    * Playback waits for a decodable frame; pauses are sequenced after the in-flight play.
    * Visitors who ask for reduced motion get a single still frame instead. */
@@ -190,7 +188,7 @@ function HeroReel({ index }) {
   return (
     <div aria-hidden style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: 'var(--color-surface-dark)' }}>
       {HERO_CLIPS.map((src, i) => (
-        <video key={src} ref={el => refs.current[i] = el} src={i === 0 ? src : undefined} muted loop playsInline autoPlay={!CB_REDUCED_MOTION} preload={i === 0 ? 'auto' : 'none'} style={{
+        <video key={src} ref={el => { refs.current[i] = el; cbPrimeClip(el); }} src={i === 0 ? src : undefined} muted loop playsInline autoPlay={!CB_REDUCED_MOTION} preload={i === 0 ? 'auto' : 'none'} style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
           opacity: i === index ? 1 : 0, transition: 'opacity 1.4s ease',
         }}></video>

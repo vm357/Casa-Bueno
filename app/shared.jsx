@@ -608,24 +608,32 @@ function cbAttachClip(v, src, preload) {
   v.load();
 }
 
-/* iOS only honours inline autoplay when muted and playsinline are present as
- * real attributes at the moment play() is called. React sets them as
- * properties, which is not always enough on older Safari. */
-function cbPrimeClips(videos) {
-  videos.forEach((v) => {
-    if (!v) return;
-    v.muted = true;
-    v.defaultMuted = true;
-    v.setAttribute('muted', '');
-    v.setAttribute('playsinline', '');
-    v.setAttribute('webkit-playsinline', '');
-    v.disableRemotePlayback = true;
-  });
+/* iOS decides whether a video may autoplay inline at the moment the element is
+ * created — it reads the muted and playsinline ATTRIBUTES, and React only sets
+ * them as properties. Missing attributes mean the clip is treated as a
+ * user-initiated video and Safari paints its own play-button overlay.
+ *
+ * This must therefore run from the ref callback (synchronously, as the element
+ * is created), not from an effect, which fires too late. */
+function cbPrimeClip(v) {
+  if (!v || v.dataset.cbPrimed) return;
+  v.dataset.cbPrimed = '1';
+  v.muted = true;
+  v.defaultMuted = true;
+  v.volume = 0;
+  v.setAttribute('muted', '');
+  v.setAttribute('playsinline', '');
+  v.setAttribute('webkit-playsinline', '');
+  v.setAttribute('disablepictureinpicture', '');
+  v.disableRemotePlayback = true;
+  v.controls = false;
 }
+
+function cbPrimeClips(videos) { (videos || []).forEach(cbPrimeClip); }
 
 Object.assign(window, {
   CB_NAV, CB_LISTINGS, CB_TESTIMONIALS, ORB_STOPS, CB_ORB_CYCLE, IDX_PHOTO, IDX_DETAIL, CB_REDUCED_MOTION,
-  cbAttachClip, cbPrimeClips,
+  cbAttachClip, cbPrimeClip, cbPrimeClips,
   PageBloom, Wordmark, NavBar, Eyebrow, SectionHead, Field, CBInput, CBSelect,
   SearchBar, ListingPhoto, ListingCard, Footer
 });
