@@ -117,13 +117,15 @@ const HERO_POSTERS = window.CB_LISTINGS.filter(l => l.img).slice(0, HERO_CLIPS.l
 function HeroReel({ index }) {
   const refs = React.useRef([]);
   const playing = React.useRef(null);
+
+  React.useEffect(() => { cbPrimeClips(refs.current); }, []);
+
   /* Only the current clip (and the next one, warming) is allowed to download.
    * Playback waits for a decodable frame; pauses are sequenced after the in-flight play.
    * Visitors who ask for reduced motion get a single still frame instead. */
   React.useEffect(() => {
     if (CB_REDUCED_MOTION) {
-      const v = refs.current[0];
-      if (v && !v.getAttribute('src')) { v.preload = 'metadata'; v.src = HERO_CLIPS[0]; }
+      cbAttachClip(refs.current[0], HERO_CLIPS[0], 'metadata');
       return;
     }
     const next = (index + 1) % HERO_CLIPS.length;
@@ -131,25 +133,48 @@ function HeroReel({ index }) {
       if (!v) return;
       if (i === index) {
         v.preload = 'auto';
-        if (!v.getAttribute('src')) v.src = HERO_CLIPS[i];
+        cbAttachClip(v, HERO_CLIPS[i], 'auto');
         const start = () => {
+          v.muted = true;
           if (v.readyState >= 2) { try { v.currentTime = 0; } catch (e) {} }
           const p = v.play();
           if (p && p.then) { playing.current = p.catch(() => {}); }
         };
         if (v.readyState >= 2) start();
-        else v.addEventListener('loadeddata', start, { once: true });
+        else {
+          /* loadeddata alone is unreliable on iOS when the tab was backgrounded
+           * during the fetch; canplay covers the case where it never fires. */
+          v.addEventListener('loadeddata', start, { once: true });
+          v.addEventListener('canplay', start, { once: true });
+        }
       } else {
         const stop = () => { try { v.pause(); } catch (e) {} };
         if (playing.current) playing.current.then(stop, stop); else stop();
-        if (i === next && !v.getAttribute('src')) { v.preload = 'auto'; v.src = HERO_CLIPS[i]; }
+        if (i === next) cbAttachClip(v, HERO_CLIPS[i], 'auto');
       }
     });
+  }, [index]);
+
+  /* Returning from the app switcher or unlocking the phone suspends playback
+   * without firing an error; nudge the visible clip when the page comes back. */
+  React.useEffect(() => {
+    if (CB_REDUCED_MOTION) return;
+    const resume = () => {
+      if (document.hidden) return;
+      const v = refs.current[index];
+      if (v && v.paused) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+    };
+    document.addEventListener('visibilitychange', resume);
+    window.addEventListener('pageshow', resume);
+    return () => {
+      document.removeEventListener('visibilitychange', resume);
+      window.removeEventListener('pageshow', resume);
+    };
   }, [index]);
   return (
     <div aria-hidden style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: 'var(--color-surface-dark)' }}>
       {HERO_CLIPS.map((src, i) => (
-        <video key={src} ref={el => refs.current[i] = el} src={i === 0 ? src : undefined} muted loop playsInline preload={i === 0 ? 'auto' : 'none'} style={{
+        <video key={src} ref={el => refs.current[i] = el} src={i === 0 ? src : undefined} poster={HERO_POSTERS[i]} muted loop playsInline preload={i === 0 ? 'auto' : 'none'} style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
           opacity: i === index ? 1 : 0, transition: 'opacity 1.4s ease',
         }}></video>

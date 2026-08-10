@@ -598,8 +598,34 @@ function Footer() {
   window.addEventListener('hashchange', () => jump(true));
 })();
 
+/* Attach a clip and tell the element to fetch it.
+ * Safari will not begin downloading after a JS src assignment unless load() is
+ * called, so preload="none" clips otherwise stay blank on iOS forever. */
+function cbAttachClip(v, src, preload) {
+  if (!v || v.getAttribute('src')) return;
+  v.preload = preload;
+  v.setAttribute('src', src);
+  v.load();
+}
+
+/* iOS only honours inline autoplay when muted and playsinline are present as
+ * real attributes at the moment play() is called. React sets them as
+ * properties, which is not always enough on older Safari. */
+function cbPrimeClips(videos) {
+  videos.forEach((v) => {
+    if (!v) return;
+    v.muted = true;
+    v.defaultMuted = true;
+    v.setAttribute('muted', '');
+    v.setAttribute('playsinline', '');
+    v.setAttribute('webkit-playsinline', '');
+    v.disableRemotePlayback = true;
+  });
+}
+
 Object.assign(window, {
   CB_NAV, CB_LISTINGS, CB_TESTIMONIALS, ORB_STOPS, CB_ORB_CYCLE, IDX_PHOTO, IDX_DETAIL, CB_REDUCED_MOTION,
+  cbAttachClip, cbPrimeClips,
   PageBloom, Wordmark, NavBar, Eyebrow, SectionHead, Field, CBInput, CBSelect,
   SearchBar, ListingPhoto, ListingCard, Footer
 });

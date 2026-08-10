@@ -12,28 +12,52 @@ function RelocReel({ index }) {
   React.useEffect(() => {
     if (CB_REDUCED_MOTION) {
       const v = refs.current[0];
-      if (v && !v.getAttribute('src')) { v.preload = 'metadata'; v.src = RELOC_CLIPS[0]; }
+      cbAttachClip(v, RELOC_CLIPS[0], 'metadata');
       return;
     }
     const next = (index + 1) % RELOC_CLIPS.length;
     refs.current.forEach((v, i) => {
       if (!v) return;
       if (i === index) {
-        v.preload = 'auto';
-        if (!v.getAttribute('src')) v.src = RELOC_CLIPS[i];
+        cbAttachClip(v, RELOC_CLIPS[i], 'auto');
         const start = () => {
+          v.muted = true;
           if (v.readyState >= 2) { try { v.currentTime = 0; } catch (e) {} }
           const p = v.play();
           if (p && p.then) playing.current = p.catch(() => {});
         };
-        if (v.readyState >= 2) start(); else v.addEventListener('loadeddata', start, { once: true });
+        if (v.readyState >= 2) start();
+        else {
+          v.addEventListener('loadeddata', start, { once: true });
+          v.addEventListener('canplay', start, { once: true });
+        }
       } else {
         const stop = () => { try { v.pause(); } catch (e) {} };
         if (playing.current) playing.current.then(stop, stop); else stop();
-        if (i === next && !v.getAttribute('src')) { v.preload = 'auto'; v.src = RELOC_CLIPS[i]; }
+        if (i === next) cbAttachClip(v, RELOC_CLIPS[i], 'auto');
       }
     });
   }, [index]);
+
+  React.useEffect(() => { cbPrimeClips(refs.current); }, []);
+
+  /* Returning from the app switcher or unlocking the phone suspends playback
+   * without firing an error; nudge the visible clip when the page comes back. */
+  React.useEffect(() => {
+    if (CB_REDUCED_MOTION) return;
+    const resume = () => {
+      if (document.hidden) return;
+      const v = refs.current[index];
+      if (v && v.paused) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+    };
+    document.addEventListener('visibilitychange', resume);
+    window.addEventListener('pageshow', resume);
+    return () => {
+      document.removeEventListener('visibilitychange', resume);
+      window.removeEventListener('pageshow', resume);
+    };
+  }, [index]);
+
   return (
     <div aria-hidden style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: 'var(--color-surface-dark)' }}>
       {RELOC_CLIPS.map((src, i) => (
