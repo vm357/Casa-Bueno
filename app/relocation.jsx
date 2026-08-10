@@ -41,6 +41,25 @@ function RelocReel({ index }) {
 
   React.useEffect(() => { cbPrimeClips(refs.current); }, []);
 
+  /* iOS can refuse the automatic start outright (Low Power Mode, Safari's
+   * media policy). The first touch anywhere on the page is a user gesture, so
+   * retry once there rather than leaving the poster frame up. */
+  React.useEffect(() => {
+    if (CB_REDUCED_MOTION) return;
+    const kick = () => {
+      const v = refs.current[index];
+      if (!v) return;
+      v.muted = true;
+      if (v.paused) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+    };
+    document.addEventListener('touchstart', kick, { once: true, passive: true });
+    document.addEventListener('click', kick, { once: true });
+    return () => {
+      document.removeEventListener('touchstart', kick);
+      document.removeEventListener('click', kick);
+    };
+  }, [index]);
+
   /* Returning from the app switcher or unlocking the phone suspends playback
    * without firing an error; nudge the visible clip when the page comes back. */
   React.useEffect(() => {
@@ -61,7 +80,7 @@ function RelocReel({ index }) {
   return (
     <div aria-hidden style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: 'var(--color-surface-dark)' }}>
       {RELOC_CLIPS.map((src, i) => (
-        <video key={src} ref={el => refs.current[i] = el} src={i === 0 ? src : undefined} muted loop playsInline preload={i === 0 ? 'auto' : 'none'} style={{
+        <video key={src} ref={el => refs.current[i] = el} src={i === 0 ? src : undefined} muted loop playsInline autoPlay={!CB_REDUCED_MOTION} preload={i === 0 ? 'auto' : 'none'} style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
           opacity: i === index ? 1 : 0, transition: 'opacity 1.4s ease',
         }}></video>
