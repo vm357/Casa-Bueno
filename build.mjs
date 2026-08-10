@@ -7,8 +7,7 @@
 //   - transpiles every app/*.jsx to plain JS (no browser Babel)
 //   - drops the @babel/standalone script tag from each page
 //   - minifies the JSX output and app/analytics.js
-//   - copies HTML, CSS, assets, uploads, the design system, and the Cloudflare
-//     Pages Functions through untouched
+//   - copies HTML, CSS, assets, uploads, and the design system through untouched
 //
 // The authored files are never modified. Deploy dist/, keep editing the root.
 
@@ -22,9 +21,10 @@ const DIST = path.join(ROOT, 'dist');
 const PAGES = ['404.html', 'About.html', 'Buy-Sell.html', 'index.html', 'Listings.html',
   'Privacy.html', 'Relocation.html', 'Reviews.html', 'Terms.html', 'Accessibility.html'];
 
-// Cloudflare Pages reads functions/, _headers and _redirects from the root of
-// the deployed directory, so they have to land inside dist/.
-const PASSTHROUGH = ['assets', 'uploads', '_ds', 'functions', 'robots.txt', 'sitemap.xml',
+// Cloudflare reads _headers and _redirects from the root of the deployed
+// directory, so they have to land inside dist/. The API handlers are bundled
+// into the Worker from src/ and are deliberately NOT copied here.
+const PASSTHROUGH = ['assets', 'uploads', '_ds', 'robots.txt', 'sitemap.xml',
   '_headers', '_redirects'];
 
 await rm(DIST, { recursive: true, force: true });

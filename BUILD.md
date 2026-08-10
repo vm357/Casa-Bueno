@@ -9,24 +9,27 @@ right tradeoff while designing and a poor one for visitors — it costs roughly
 Output lands in `dist/`. Keep editing the files in the project root; the build
 never modifies them.
 
-## Cloudflare Pages
+## Cloudflare Workers
 
-Cloudflare runs the build itself on every push. Connect the repository once:
+The site deploys as a Cloudflare Worker with static assets. `wrangler.jsonc`
+holds the configuration: `dist/` is served as static files, and `src/worker.js`
+handles only the two API routes.
 
-1. Push this project to GitHub.
-2. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
-   **Connect to Git**, and pick the repository.
-3. Build settings:
+Build settings in the dashboard (Workers & Pages → the project → Settings →
+Build):
 
-   | Field | Value |
-   | --- | --- |
-   | Framework preset | None |
-   | Build command | `npm install && npm run build` |
-   | Build output directory | `dist` |
-   | Node version | 20 (set `NODE_VERSION` = `20` under environment variables) |
+| Field | Value |
+| --- | --- |
+| Build command | `npm install && npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Build output directory | *(leave blank — `wrangler.jsonc` sets it)* |
 
-4. Save and deploy. Every push to `main` republishes; other branches get their
-   own preview URL.
+Every push to `main` republishes.
+
+> **If the deploy fails with "Asset too large… node_modules/workerd".** That
+> means `wrangler.jsonc` was missing or not committed, so Wrangler fell back to
+> uploading the repository root. Confirm `wrangler.jsonc` is in the repo and
+> that `.gitignore` excludes `node_modules` and `dist`.
 
 ### Custom domain
 
@@ -38,12 +41,12 @@ mechanism and has been removed.
 
 ## The lead relay
 
-`functions/api/lead.js` is a Cloudflare Pages Function. It receives the contact
-form submission at `/api/lead` and forwards it to Follow Up Boss server-side, so
-the API key never appears in the page source.
+`src/lead.js` runs inside the Worker. It receives the contact form submission at
+`/api/lead` and forwards it to Follow Up Boss server-side, so the API key never
+appears in the page source.
 
-To turn it on: Pages project → **Settings** → **Environment variables** → add an
-**encrypted** variable named `FUB_API_KEY` (Follow Up Boss → Admin → API →
+To turn it on: the project → **Settings** → **Variables and Secrets** → add a
+**Secret** named `FUB_API_KEY` (Follow Up Boss → Admin → API →
 generate a key). Add it to both Production and Preview. Redeploy.
 
 Until that variable exists the endpoint still returns success and writes the
@@ -53,7 +56,7 @@ lead to the function log, so the form never shows an error to a visitor. Check
 Optional: `FUB_SYSTEM_KEY`, if Follow Up Boss issues you a registered system key
 for cleaner source attribution.
 
-`functions/api/review.js` does the same for submitted client reviews. Set
+`src/review.js` does the same for submitted client reviews. Set
 `REVIEW_WEBHOOK` to any URL that accepts JSON (Zapier, Make, a Slack incoming
 webhook) to receive them; otherwise they are logged.
 
@@ -71,9 +74,9 @@ npm install
 npm run build
 ```
 
-To preview the Functions too, install Wrangler and run
-`npx wrangler pages dev dist`. A plain file server will serve the pages but
-`/api/lead` will 404.
+`npm run preview` builds and then runs `wrangler dev`, which serves the site
+and the API routes together on a local port. Put local secrets in a `.dev.vars`
+file (git-ignored) as `FUB_API_KEY=...`.
 
 ## What the build changes
 
@@ -85,8 +88,9 @@ To preview the Functions too, install Wrangler and run
 | React development build | React production build (already swapped in the source) |
 
 Everything else — HTML, `app/site.css`, `assets/`, `uploads/`, the design
-system in `_ds/`, `functions/`, `_headers` and `_redirects` — is copied through
-unchanged.
+system in `_ds/`, `_headers` and `_redirects` — is copied through unchanged.
+The API handlers in `src/` are bundled into the Worker instead, so they are
+never served as files.
 
 ## Still to settle
 

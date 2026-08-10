@@ -1,0 +1,21 @@
+{
+  // Casa Bueno — Cloudflare Workers deployment.
+  //
+  // The site is built to dist/ by `npm run build`; everything in there is served
+  // as a static asset. src/worker.js only handles /api/lead and /api/review,
+  // which hold the Follow Up Boss key server-side.
+  //
+  // Secrets are NOT set here. Add FUB_API_KEY (and optionally FUB_SYSTEM_KEY,
+  // REVIEW_WEBHOOK) as encrypted variables in the dashboard, or with
+  // `npx wrangler secret put FUB_API_KEY`.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "casa-bueno",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-08-10",
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page"
+  }
+}
