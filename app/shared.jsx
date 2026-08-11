@@ -598,6 +598,36 @@ function Footer() {
   window.addEventListener('hashchange', () => jump(true));
 })();
 
+/* IDX Broker widget host.
+ *
+ * The widget is a <script> that writes its markup at its own position in the
+ * document. React never executes script tags it renders, so the element has to
+ * be built by hand and appended to a container. Each widget id may only appear
+ * once per page — IDX keys its own state off the element id.
+ *
+ * Widget ids come from the IDX control panel (Design -> Widgets). Legacy
+ * widgets (quick search, and anything predating the Prime set) are served from
+ * a different path — pass `legacy`. */
+const IDX_HOST = 'sellwithbueno.idxbroker.com';
+
+function IdxWidget({ id, height = 520, label, legacy = false }) {
+  const host = React.useRef(null);
+  React.useEffect(() => {
+    const mount = host.current;
+    if (!mount || mount.dataset.cbLoaded) return;
+    mount.dataset.cbLoaded = '1';
+    const s = document.createElement('script');
+    s.charset = 'UTF-8';
+    s.type = 'text/javascript';
+    s.id = 'idxwidgetsrc-' + id;
+    s.src = legacy
+      ? 'https://' + IDX_HOST + '/idx/quicksearchjs.php?widgetid=' + id
+      : 'https://' + IDX_HOST + '/idx/widgets/' + id;
+    mount.appendChild(s);
+  }, [id, legacy]);
+  return <div ref={host} className={'cb-idx' + (height === 'auto' ? ' cb-idx--auto' : '')} role="region" aria-label={label} style={{ height }} />;
+}
+
 /* Attach a clip and tell the element to fetch it.
  * Safari will not begin downloading after a JS src assignment unless load() is
  * called, so preload="none" clips otherwise stay blank on iOS forever. */
@@ -633,7 +663,7 @@ function cbPrimeClips(videos) { (videos || []).forEach(cbPrimeClip); }
 
 Object.assign(window, {
   CB_NAV, CB_LISTINGS, CB_TESTIMONIALS, ORB_STOPS, CB_ORB_CYCLE, IDX_PHOTO, IDX_DETAIL, CB_REDUCED_MOTION,
-  cbAttachClip, cbPrimeClip, cbPrimeClips,
+  cbAttachClip, cbPrimeClip, cbPrimeClips, IdxWidget, IDX_HOST,
   PageBloom, Wordmark, NavBar, Eyebrow, SectionHead, Field, CBInput, CBSelect,
   SearchBar, ListingPhoto, ListingCard, Footer
 });

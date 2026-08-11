@@ -655,17 +655,19 @@ window.cbTextareaStyle = {
 
 /* -------------------------------------------------------------------- app --- */
 
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "hero": "atmospheric",
-  "orb": "mint",
-  "headline": "Find the home that feels like yours.",
-  "sub": "Casa Bueno helps you sell for cash, relocate near or far, and buy with confidence — across New Jersey and beyond."
-}/*EDITMODE-END*/;
-
-const ORB_SWATCH = { mint: '#a7e5d3', peach: '#f4c5a8', lavender: '#c8b8e0', sky: '#a8c8e8', rose: '#e8b8c4' };
+/* Hero settings, locked in from the design phase. These were live controls in a
+ * tweaks panel while the layout was being decided; the panel shipped a floating
+ * UI to every visitor, so it has been removed and the chosen values frozen here.
+ * Layout options were editorial / atmospheric / minimal — see git history. */
+const HERO = {
+  hero: 'atmospheric',
+  orb: 'mint',
+  headline: 'Find the home that feels like yours.',
+  sub: 'Casa Bueno helps you sell for cash, relocate near or far, and buy with confidence — across New Jersey and beyond.',
+};
 
 function App() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const t = HERO;
   React.useEffect(() => {
     const id = window.location.hash.slice(1);
     if (!id) return;
@@ -690,19 +692,6 @@ function App() {
       <Contact />
       </main>
       <Footer />
-
-      <TweaksPanel>
-        <TweakSection label="Hero" />
-        <TweakRadio label="Layout" value={t.hero}
-          options={[{ value: 'editorial', label: 'Editorial' }, { value: 'atmospheric', label: 'Centered' }, { value: 'minimal', label: 'Minimal' }]}
-          onChange={(v) => setTweak('hero', v)} />
-        <TweakText label="Headline" value={t.headline} onChange={(v) => setTweak('headline', v)} />
-        <TweakText label="Subhead" value={t.sub} onChange={(v) => setTweak('sub', v)} />
-        <TweakSection label="Atmosphere" />
-        <TweakColor label="Gradient orb" value={ORB_SWATCH[t.orb]}
-          options={Object.values(ORB_SWATCH)}
-          onChange={(hex) => setTweak('orb', Object.keys(ORB_SWATCH).find((k) => ORB_SWATCH[k] === hex) || 'mint')} />
-      </TweaksPanel>
     </React.Fragment>
   );
 }

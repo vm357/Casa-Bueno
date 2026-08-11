@@ -156,3 +156,26 @@ a { -webkit-tap-highlight-color: transparent; }
 @media (prefers-reduced-motion: reduce) { .cb-about-cta { opacity: 1; transform: none; transition: none; } }
 .cb-about-points > div + div::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 1px; background: var(--color-hairline-strong); }
 @media (max-width: 900px) { .cb-about-points { grid-template-columns: 1fr 1fr; } .cb-about-points > div + div::before { display: none; } }
+
+/* ---------------------------------------------------------- IDX widgets ---
+   IDX Broker ships its own stylesheet with the widget. These rules pull it
+   back toward the site's type, color and radius without fighting it element by
+   element — anything not overridden falls back to IDX's own styling. */
+/* IDX mounts a custom element (idx-prime-*). Unknown elements default to
+   display:inline, so the widget's own width/height:100% is inert and the map
+   collapses to a text sliver. The host needs a definite height for the child's
+   percentage height to resolve against. */
+.cb-idx { position: relative; display: block; font-family: var(--font-body); color: var(--color-body); }
+.cb-idx > :not(script) { display: block; width: 100%; height: 100%; }
+.cb-idx > script { display: none; }
+.cb-idx--auto { height: auto !important; }
+.cb-idx--auto > :not(script) { height: auto; }
+.cb-idx a { color: var(--color-ink); }
+.cb-idx a:hover { color: var(--color-ink); text-decoration: underline; }
+.cb-idx input, .cb-idx select, .cb-idx textarea { font-family: var(--font-body) !important; font-size: 15px !important; border-radius: var(--radius-sm) !important; border: 1px solid var(--color-hairline-strong) !important; color: var(--color-ink) !important; }
+.cb-idx input:focus, .cb-idx select:focus { outline: none !important; border-color: var(--color-ink) !important; box-shadow: 0 0 0 1px var(--color-ink) !important; }
+.cb-idx button, .cb-idx .IDX-btn, .cb-idx input[type="submit"] { font-family: var(--font-body) !important; font-weight: 500 !important; border-radius: 9999px !important; background: var(--color-primary) !important; border-color: var(--color-primary) !important; color: var(--color-canvas) !important; }
+.cb-idx button:hover, .cb-idx .IDX-btn:hover, .cb-idx input[type="submit"]:hover { background: var(--color-primary-active) !important; }
+.cb-idx h1, .cb-idx h2, .cb-idx h3 { font-family: var(--font-display) !important; font-weight: var(--weight-display) !important; color: var(--color-ink) !important; }
+/* IDX's disclaimer and MLS attribution must stay visible — never hide these. */
+.cb-idx .IDX-disclaimer, .cb-idx .IDX-mlsDisclaimer { font-size: 12px; line-height: 1.5; color: var(--color-muted); }

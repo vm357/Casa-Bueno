@@ -192,6 +192,23 @@ function ListingsGrid({ search }) {
   );
 }
 
+/* Live MLS search. The curated grid above is a snapshot; this is the real feed,
+ * served by IDX Broker. Results open on Vanessa's IDX subdomain, which is what
+ * the MLS licenses the display through. */
+function ListingsSearch() {
+  return (
+    <section id="search" className="cb-band" style={{ scrollMarginTop: 88, background: 'var(--color-canvas)', borderTop: '1px solid var(--color-hairline)' }}>
+      <PageBloom hue="mint" x="6%" y="14%" size={620} opacity={0.42} />
+      <PageBloom hue="peach" x="94%" y="88%" size={560} opacity={0.38} />
+      <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-section) var(--space-lg)', display: 'flex', flexDirection: 'column', gap: 'var(--space-xxl)' }}>
+        <SectionHead eyebrow="Search the MLS" title="Search every home on the market." intro="Draw a map, set your filters, and see live listings across New Jersey — updated straight from the MLS." />
+        <IdxWidget id="4280" legacy label="Quick search" height="auto" />
+        <IdxWidget id="149787" label="Map search" height={720} />
+      </div>
+    </section>
+  );
+}
+
 function ListingsCta() {
   return (
     <section id="property-updates" className="cb-band" style={{ scrollMarginTop: 88, background: 'var(--color-canvas-soft)', borderTop: '1px solid var(--color-hairline)' }}>
@@ -218,6 +235,7 @@ function ListingsPage() {
       <main id="cb-main">
       <ListingsHeader onSearch={setSearch} />
       <ListingsGrid search={search} />
+      <ListingsSearch />
       <ListingsCta />
       </main>
       <Footer />
