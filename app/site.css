@@ -166,10 +166,12 @@ a { -webkit-tap-highlight-color: transparent; }
    collapses to a text sliver. The host needs a definite height for the child's
    percentage height to resolve against. */
 .cb-idx { position: relative; display: block; font-family: var(--font-body); color: var(--color-body); }
-.cb-idx > :not(script) { display: block; width: 100%; height: 100%; }
-.cb-idx > script { display: none; }
+.cb-idx > :not(script):not(style):not(link) { display: block; width: 100%; height: 100%; }
+/* Legacy widgets inject their own <style>/<script> alongside the markup — these
+   must stay display:none or their source text renders as page content. */
+.cb-idx script, .cb-idx style, .cb-idx link { display: none !important; }
 .cb-idx--auto { height: auto !important; }
-.cb-idx--auto > :not(script) { height: auto; }
+.cb-idx--auto > :not(script):not(style):not(link) { height: auto; }
 .cb-idx a { color: var(--color-ink); }
 .cb-idx a:hover { color: var(--color-ink); text-decoration: underline; }
 .cb-idx input, .cb-idx select, .cb-idx textarea { font-family: var(--font-body) !important; font-size: 15px !important; border-radius: var(--radius-sm) !important; border: 1px solid var(--color-hairline-strong) !important; color: var(--color-ink) !important; }
@@ -179,3 +181,7 @@ a { -webkit-tap-highlight-color: transparent; }
 .cb-idx h1, .cb-idx h2, .cb-idx h3 { font-family: var(--font-display) !important; font-weight: var(--weight-display) !important; color: var(--color-ink) !important; }
 /* IDX's disclaimer and MLS attribution must stay visible — never hide these. */
 .cb-idx .IDX-disclaimer, .cb-idx .IDX-mlsDisclaimer { font-size: 12px; line-height: 1.5; color: var(--color-muted); }
+/* The legacy quick-search ships a hard grey drop shadow and right-aligned
+   labels of its own — reset both to the site's flat, hairline-led treatment. */
+.cb-idx [id^="IDX-quicksearch-"] { box-shadow: var(--shadow-soft) !important; border: 1px solid var(--color-hairline) !important; border-radius: var(--radius-xl) !important; text-align: left !important; background: var(--color-surface-card) !important; padding: var(--space-base) !important; }
+.cb-idx [id^="IDX-quicksearch"] label { margin-right: 10px !important; font-size: 14px !important; color: var(--color-body) !important; }
