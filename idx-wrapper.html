@@ -93,9 +93,12 @@ a:hover{color:var(--color-ink,#0c0a09)}
 </div>
 </header>
 <main id="idx-content">
-<!-- IDX Broker replaces everything inside this element. The placeholder below
-     only shows if the wrapper is previewed directly. -->
+<!-- IDX Broker injects its pages between the idxStart and idxStop markers.
+     Anything between them (the placeholder below) is replaced, and only shows
+     if this wrapper is previewed directly. -->
+<div id="idxStart"></div>
 <p>Loading property search…</p>
+<div id="idxStop"></div>
 </main>
 <footer class="w-foot">
 <div class="w-foot-in">
