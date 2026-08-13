@@ -24,7 +24,9 @@ const PAGES = ['404.html', 'About.html', 'Buy-Sell.html', 'index.html', 'Listing
 // Cloudflare reads _headers and _redirects from the root of the deployed
 // directory, so they have to land inside dist/. The API handlers are bundled
 // into the Worker from src/ and are deliberately NOT copied here.
-const PASSTHROUGH = ['assets', 'uploads', '_ds', 'robots.txt', 'sitemap.xml',
+// idx-wrapper.html is deliberately plain HTML (no JSX), so it passes through
+// untouched rather than going through the page rewrite above.
+const PASSTHROUGH = ['idx-wrapper.html', 'assets', 'uploads', '_ds', 'robots.txt', 'sitemap.xml',
   '_headers', '_redirects'];
 
 await rm(DIST, { recursive: true, force: true });
