@@ -608,9 +608,17 @@ function Footer() {
  * Widget ids come from the IDX control panel (Design -> Widgets). Legacy
  * widgets (quick search, and anything predating the Prime set) are served from
  * a different path — pass `legacy`. */
-const IDX_HOST = 'sellwithbueno.idxbroker.com';
+/* Widget ids come from the IDX control panel (Design -> Widgets). Each family is
+ * served from its own path, so pass `kind`: 'prime' (the default, current
+ * widgets), 'quicksearch', or 'map' (both legacy). Served from the custom search
+ * subdomain so widget requests, lead cookies and result links share one origin. */
+const IDX_HOST = 'search.sellwithbueno.com';
+const IDX_SRC = {
+  prime: id => 'https://' + IDX_HOST + '/idx/widgets/' + id,
+  quicksearch: id => 'https://' + IDX_HOST + '/idx/quicksearchjs.php?widgetid=' + id,
+  map: id => 'https://' + IDX_HOST + '/idx/mapwidgetjs.php?widgetid=' + id };
 
-function IdxWidget({ id, height = 520, label, legacy = false }) {
+function IdxWidget({ id, height = 520, label, kind = 'prime', legacy = false }) {
   const host = React.useRef(null);
   React.useEffect(() => {
     const mount = host.current;
@@ -620,11 +628,9 @@ function IdxWidget({ id, height = 520, label, legacy = false }) {
     s.charset = 'UTF-8';
     s.type = 'text/javascript';
     s.id = 'idxwidgetsrc-' + id;
-    s.src = legacy
-      ? 'https://' + IDX_HOST + '/idx/quicksearchjs.php?widgetid=' + id
-      : 'https://' + IDX_HOST + '/idx/widgets/' + id;
+    s.src = (IDX_SRC[legacy ? 'quicksearch' : kind] || IDX_SRC.prime)(id);
     mount.appendChild(s);
-  }, [id, legacy]);
+  }, [id, kind, legacy]);
   return <div ref={host} className={'cb-idx' + (height === 'auto' ? ' cb-idx--auto' : '')} role="region" aria-label={label} style={{ height }} />;
 }
 

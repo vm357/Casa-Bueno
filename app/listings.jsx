@@ -203,7 +203,7 @@ function ListingsSearch() {
       <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-section) var(--space-lg)', display: 'flex', flexDirection: 'column', gap: 'var(--space-xxl)' }}>
         <SectionHead eyebrow="Search the MLS" title="Search every home on the market." intro="Draw a map, set your filters, and see live listings across New Jersey — updated straight from the MLS." />
         <IdxWidget id="4280" legacy label="Quick search" height="auto" />
-        <IdxWidget id="149787" label="Map search" height={720} />
+        <IdxWidget id="4283" kind="map" label="Map search" height={720} />
       </div>
     </section>
   );

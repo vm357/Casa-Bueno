@@ -1,29 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Property search — Casa Bueno</title>
-<!--
-  IDX Broker wrapper page.
-
-  IDX copies this page's rendered HTML and injects its own search, results and
-  listing-detail markup into #idx-content. Because IDX serves the result from
-  its own servers, EVERY url here must be absolute — a relative path would
-  resolve against search.sellwithbueno.com and 404.
-
-  This page is deliberately plain HTML, not React: IDX reads the source it is
-  served, and a React page would come across as an empty <div>. Keep it in sync
-  by hand when the real nav or footer changes.
-
-  Deliberately NO robots meta: IDX copies this document wholesale, so a noindex
-  here would propagate to every generated search and listing-detail page and
-  throw away the SEO the custom subdomain exists to capture.
-
-  Every var() carries a literal fallback. Eight cross-origin stylesheets have to
-  land before this page has a single token, and it wraps every listing page —
-  if one request is slow or blocked it must degrade, not collapse.
--->
 <link rel="icon" type="image/png" href="https://sellwithbueno.com/assets/favicon-512.png">
 <link rel="stylesheet" href="https://sellwithbueno.com/_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/fonts.css">
 <link rel="stylesheet" href="https://sellwithbueno.com/_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/colors.css">
@@ -77,9 +51,6 @@ a:hover{color:var(--color-ink,#0c0a09)}
 }
 @media (max-width:420px){.w-links{gap:12px}.w-links a{font-size:13.5px}}
 </style>
-</head>
-<body>
-<a class="w-skip" href="#idx-content">Skip to listings</a>
 <header class="w-nav">
 <div class="w-nav-in">
 <a class="w-brand" href="https://sellwithbueno.com/"><img src="https://sellwithbueno.com/assets/casa-bueno-mark.png" alt=""><span>Casa Bueno</span></a>
@@ -94,45 +65,4 @@ a:hover{color:var(--color-ink,#0c0a09)}
 <a class="w-cta" href="https://sellwithbueno.com/index.html#contact">Get in touch</a>
 </div>
 </header>
-<!-- IDX Broker injects its pages between the idxStart and idxStop markers, which
-     must be direct children of <body> — nesting them inside a <main> made IDX
-     discard the header and footer. The div in between is our own padding wrapper
-     and the placeholder only shows if this page is previewed directly. -->
-<div id="idxStart"></div>
 <div id="idx-content">
-<p>Loading property search…</p>
-</div>
-<div id="idxStop"></div>
-<footer class="w-foot">
-<div class="w-foot-in">
-<div>
-<a class="w-brand" href="https://sellwithbueno.com/" style="margin-bottom:var(--space-base,16px)"><img src="https://sellwithbueno.com/assets/casa-bueno-mark.png" alt=""><span style="color:var(--color-on-dark,#f5f5f5)">Casa Bueno</span></a>
-<p>Vanessa Bueno, NJ Realtor.<br>151 Forest Street, Unit H, Montclair, NJ 07042</p>
-</div>
-<div>
-<h3>Get in touch</h3>
-<ul>
-<li><a href="tel:+17326313267">(732) 631-3267</a></li>
-<li><a href="mailto:vanessasellsnj1@gmail.com">vanessasellsnj1@gmail.com</a></li>
-<li><a href="https://sellwithbueno.com/index.html#contact">Contact form</a></li>
-</ul>
-</div>
-<div>
-<h3>Explore</h3>
-<ul>
-<li><a href="https://sellwithbueno.com/Listings.html">Listings</a></li>
-<li><a href="https://sellwithbueno.com/Reviews.html">Reviews</a></li>
-<li><a href="https://sellwithbueno.com/Relocation.html">Relocation</a></li>
-<li><a href="https://sellwithbueno.com/Buy-Sell.html">Buy/Sell</a></li>
-</ul>
-</div>
-</div>
-<div class="w-legal">
-<div class="w-legal-in">
-<p>Casa Bueno Group is a team at Prestige Properties &amp; Development. Each office is independently owned and operated. All information deemed reliable but not guaranteed. Equal Housing Opportunity.</p>
-<img src="https://sellwithbueno.com/assets/prestige-property-group-light.png" alt="Prestige Properties &amp; Development">
-</div>
-</div>
-</footer>
-</body>
-</html>

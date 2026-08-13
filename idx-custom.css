@@ -1,0 +1,54 @@
+/* Casa Bueno — IDX Broker Custom CSS.
+   Paste below the existing #IDX-main rule in Design > Custom CSS, in BOTH
+   Global > Desktop and Global > Mobile.
+
+   IDX's own stylesheet is not loading on wrapper-served pages, so this file has
+   to do two jobs: hide the containers IDX assumes are hidden, and style the
+   search form. Selectors come from the live markup on
+   search.sellwithbueno.com/idx/search/advanced. */
+
+/* 1. Hidden data containers. IDX prints its config as JSON into these divs and
+   relies on .IDX-hide to keep them out of view. Hidden by id rather than by the
+   class itself: #IDX-searchPageWrapper also carries IDX-hide and is unhidden by
+   their JS, so a blanket .IDX-hide rule would blank the whole page. */
+#IDX-pageSettings,#IDX-cczListRules,#IDX-mlsList,#IDX-modifySearchData,#IDX-defaultPriceData,#IDX-editSavedSearch,#IDX-ccz{display:none!important}
+#IDX-main input.IDX-hide,#IDX-main .IDX-recaptchaToken{display:none!important}
+/* Their loading indicator never resolves without their JS, so it would otherwise
+   sit on the page reading "Loading" forever. */
+#IDX-loadingScreen{display:none!important}
+#IDX-advancedSearchFields:empty{display:none}
+
+/* 2. Type and rhythm. */
+#IDX-main{font-family:var(--font-body,'Inter',system-ui,sans-serif);color:var(--color-body,#44403c);font-size:15px;line-height:1.6}
+#IDX-main h1,#IDX-main h2,#IDX-main h3,#IDX-main .IDX-advanced-fields__title{font-family:var(--font-display,'EB Garamond',Georgia,serif);font-weight:var(--weight-display,300);color:var(--color-ink,#0c0a09);letter-spacing:-.4px;font-size:22px;margin:32px 0 16px}
+
+/* 3. Search-type nav: Advanced Search / Listing ID / Address / Map Search. */
+.IDX-precision-navbar .IDX-nav-items-container{display:flex;flex-wrap:wrap;gap:8px}
+.IDX-precision-navbar hr{display:none}
+.IDX-searchNavLink{display:inline-block;padding:9px 18px;border:1px solid var(--color-hairline,#e7e5e4);border-radius:var(--radius-pill,9999px);font-size:14px;text-decoration:none;color:var(--color-ink,#0c0a09);background:#fff}
+.IDX-searchNavLink:hover{border-color:var(--color-hairline-strong,#d6d3d1);text-decoration:none}
+.IDX-searchNavItem.IDX-active .IDX-searchNavLink{background:var(--color-primary,#0c0a09);border-color:var(--color-primary,#0c0a09);color:var(--color-canvas,#f5f5f5)}
+
+/* 4. The form itself: IDX emits one .IDX-control-group per field, so a grid over
+   the field container lays the whole form out without per-field rules. */
+#IDX-coreSearchFields{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px 24px;margin:32px 0}
+.IDX-location-group{grid-column:1/-1}
+.IDX-control-group{min-width:0}
+.IDX-title--PL{display:block;font-size:13px;color:var(--color-muted,#78716c);margin:0 0 6px}
+#IDX-main select,#IDX-main input[type="text"],#IDX-main input[type="number"],#IDX-main input[type="email"]{width:100%;box-sizing:border-box;padding:10px 12px;font-family:inherit;font-size:15px;color:var(--color-ink,#0c0a09);background:#fff;border:1px solid var(--color-hairline-strong,#d6d3d1);border-radius:var(--radius-sm,8px)}
+#IDX-main select[multiple]{height:auto;min-height:96px;padding:6px}
+#IDX-main select:focus,#IDX-main input:focus{outline:none;border-color:var(--color-ink,#0c0a09);box-shadow:0 0 0 1px var(--color-ink,#0c0a09)}
+
+/* 5. Submit. */
+#IDX-action-buttons{margin:8px 0 32px}
+#IDX-main .IDX-btn,#IDX-main button[type="submit"]{display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;font-family:inherit;font-size:15px;font-weight:500;color:var(--color-canvas,#f5f5f5);background:var(--color-primary,#0c0a09);border:0;border-radius:var(--radius-pill,9999px);cursor:pointer}
+#IDX-main .IDX-btn:hover,#IDX-main button[type="submit"]:hover{background:var(--color-primary-active,#000)}
+
+/* 6. Results and detail pages share these primitives. */
+#IDX-main a{color:var(--color-ink,#0c0a09)}
+#IDX-main a:hover{color:var(--color-ink,#0c0a09);text-decoration:underline}
+#IDX-main table{border-collapse:collapse;width:100%}
+#IDX-main td,#IDX-main th{padding:8px 10px;border-bottom:1px solid var(--color-hairline,#e7e5e4);text-align:left}
+#IDX-main img{max-width:100%;height:auto}
+#IDX-main .IDX-disclaimer,#IDX-main .IDX-mlsDisclaimer{font-size:12px;line-height:1.5;color:var(--color-muted,#78716c)}
+br.IDX-clear{display:none}
