@@ -26,7 +26,7 @@ const PAGES = ['404.html', 'About.html', 'Buy-Sell.html', 'index.html', 'Listing
 // into the Worker from src/ and are deliberately NOT copied here.
 // idx-wrapper.html is deliberately plain HTML (no JSX), so it passes through
 // untouched rather than going through the page rewrite above.
-const PASSTHROUGH = ['idx-wrapper.html', 'assets', 'uploads', '_ds', 'robots.txt', 'sitemap.xml',
+const PASSTHROUGH = ['idx-wrapper.html', 'assets', 'uploads', '_ds', 'robots.txt', 'sitemap.xml', 'manifest.webmanifest',
   '_headers', '_redirects'];
 
 await rm(DIST, { recursive: true, force: true });
@@ -55,7 +55,7 @@ for (const file of jsx) {
 console.log(`transpiled ${jsx.length} jsx files`);
 
 // 2. minify the plain-JS helpers
-for (const file of ['analytics.js', 'listings-data.js']) {
+for (const file of ['analytics.js']) {
   await build({
     entryPoints: [path.join(ROOT, 'app', file)],
     outfile: path.join(DIST, 'app', file),

@@ -52,6 +52,13 @@ a { -webkit-tap-highlight-color: transparent; }
 /* band atmosphere — a stacking context so blooms sit above the band background but under content */
 .cb-band { position: relative; overflow: hidden; isolation: isolate; }
 .cb-bloom { position: absolute; border-radius: 50%; pointer-events: none; z-index: -1; }
+/* Slow drifting blooms. Two offset keyframe sets so paired blooms in a section
+   never move in lockstep; disabled when the visitor prefers reduced motion. */
+@keyframes cb-bloom-drift-a { 0%,100% { transform: translate(-50%,-50%) scale(1); } 50% { transform: translate(-46%,-56%) scale(1.14); } }
+@keyframes cb-bloom-drift-b { 0%,100% { transform: translate(-50%,-50%) scale(1.08); } 50% { transform: translate(-56%,-44%) scale(0.94); } }
+.cb-bloom--drift { animation: cb-bloom-drift-a 22s ease-in-out infinite; }
+.cb-bloom--drift-alt { animation: cb-bloom-drift-b 28s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .cb-bloom--drift, .cb-bloom--drift-alt { animation: none; } }
 .cb-legal-hero-inner { position: relative; max-width: var(--container-max); margin: 0 auto; padding: calc(var(--space-section) + 28px) var(--space-lg) var(--space-xxl); }
 .cb-legal-hero h1 { margin: var(--space-base) 0 0; font-family: var(--font-display); font-weight: 300; font-size: clamp(38px, 6vw, 62px); line-height: 1.05; letter-spacing: -1.6px; color: var(--color-ink); }
 .cb-legal-sub { margin: 12px 0 0; font-family: var(--font-body); font-size: var(--type-body-md-size); color: var(--color-muted); }
@@ -182,6 +189,22 @@ a { -webkit-tap-highlight-color: transparent; }
 .cb-idx h1, .cb-idx h2, .cb-idx h3 { font-family: var(--font-display) !important; font-weight: var(--weight-display) !important; color: var(--color-ink) !important; }
 /* IDX's disclaimer and MLS attribution must stay visible — never hide these. */
 .cb-idx .IDX-disclaimer, .cb-idx .IDX-mlsDisclaimer { font-size: 12px; line-height: 1.5; color: var(--color-muted); }
+/* Section reveal: fades and lifts into place the first time it scrolls into view,
+   rather than on load, since this section sits below the fold. */
+.cb-inview { opacity: 0; transform: translateY(22px); transition: opacity 700ms cubic-bezier(.22,.61,.36,1), transform 700ms cubic-bezier(.22,.61,.36,1); }
+.cb-inview.is-in { opacity: 1; transform: none; }
+/* Hover life on the IDX listing cards. IDX renders into our document, so these
+   reach its markup; selectors stay structural (a link wrapping a photo) because
+   class names differ between widget types. */
+.cb-idx--cards a:has(img) { display: block; text-decoration: none; }
+.cb-idx--cards a:has(img) img { transition: transform 600ms cubic-bezier(.22,.61,.36,1); will-change: transform; }
+.cb-idx--cards a:has(img):hover img { transform: scale(1.045); }
+.cb-idx--cards [class*="Wrapper"], .cb-idx--cards [class*="wrapper"] { transition: box-shadow 260ms ease-out; }
+.cb-idx--cards [class*="Wrapper"]:hover, .cb-idx--cards [class*="wrapper"]:hover { box-shadow: var(--shadow-soft); }
+@media (prefers-reduced-motion: reduce) {
+  .cb-inview { opacity: 1; transform: none; transition: none; }
+  .cb-idx--cards a:has(img):hover img { transform: none; }
+}
 /* The legacy quick-search ships a hard grey drop shadow and right-aligned
    labels of its own — reset both to the site's flat, hairline-led treatment. */
 .cb-idx [id^="IDX-quicksearch-"] { box-shadow: var(--shadow-soft) !important; border: 1px solid var(--color-hairline) !important; border-radius: var(--radius-xl) !important; text-align: left !important; background: var(--color-surface-card) !important; padding: var(--space-base) !important; }

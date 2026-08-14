@@ -24,7 +24,8 @@
   land before this page has a single token, and it wraps every listing page —
   if one request is slow or blocked it must degrade, not collapse.
 -->
-<link rel="icon" type="image/png" href="https://sellwithbueno.com/assets/favicon-512.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://sellwithbueno.com/assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://sellwithbueno.com/assets/apple-touch-icon.png">
 <link rel="stylesheet" href="https://sellwithbueno.com/_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/fonts.css">
 <link rel="stylesheet" href="https://sellwithbueno.com/_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/colors.css">
 <link rel="stylesheet" href="https://sellwithbueno.com/_ds/elevenlabs-design-system-2f7f30ca-27e7-4c72-beb1-12456b3dbfc7/tokens/typography.css">
@@ -52,6 +53,17 @@ a:hover{color:var(--color-ink,#0c0a09)}
 /* IDX strips the element between the markers, so the same frame is applied to
    the containers IDX itself injects (#IDX-main / #idxContainer). */
 #idx-content,#IDX-main,#idxContainer{min-height:60vh;max-width:var(--container-max,1200px);margin:0 auto;padding:var(--space-xxl,64px) var(--space-lg,24px)}
+/* IDX's own stylesheet does not load on wrapper-served pages, and Custom CSS is
+   not reliably served either, so the rules IDX assumes exist are declared here —
+   this block provably loads, since the nav above is styled by it.
+   .IDX-hide is IDX's utility for their JSON config containers; the page wrapper
+   is exempted because it also carries the class and is un-hidden by their JS. */
+.IDX-hide:not(#IDX-searchPageWrapper):not(#IDX-main):not(#idxStart):not(#idxStop){display:none!important}
+#IDX-pageSettings,#IDX-cczListRules,#IDX-mlsList,#IDX-modifySearchData,#IDX-defaultPriceData,#IDX-editSavedSearch,#IDX-ccz{display:none!important}
+/* Their loading overlay never resolves without their stylesheet, so it sits over
+   the form and swallows clicks. */
+#IDX-loadingScreen,.IDX-loadingScreen,.IDX-loading{display:none!important}
+#idx-content input,#idx-content select,#idx-content button,#idx-content textarea{font-family:inherit}
 .w-foot{background:#1c1512;color:var(--color-on-dark,#f5f5f5)}
 .w-foot-in{max-width:var(--container-max,1200px);margin:0 auto;padding:var(--space-section,96px) var(--space-lg,24px) var(--space-xxl,64px);display:grid;grid-template-columns:minmax(280px,1fr) auto auto;gap:var(--space-xxl,64px)}
 .w-foot h3{margin:0 0 var(--space-base,16px);font-family:var(--font-body,'Inter',system-ui,-apple-system,sans-serif);font-size:12px;font-weight:600;letter-spacing:.96px;text-transform:uppercase;opacity:.6}
