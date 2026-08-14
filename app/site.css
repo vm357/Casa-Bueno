@@ -42,6 +42,11 @@ a { -webkit-tap-highlight-color: transparent; }
   .cb-quote-lift:hover { transform: none !important; }
   .cb-stat-grid { grid-template-columns: 1fr 1fr !important; gap: var(--space-xl) !important; }
   .cb-footer-grid { grid-template-columns: 1fr !important; } .cb-footer-links { grid-template-columns: 1fr 1fr !important; gap: var(--space-lg) !important; } .cb-footer-links { grid-template-columns: auto auto auto !important; gap: var(--space-xl) !important; }
+  /* IDX widgets stack much taller on a phone than their desktop fixed height, and
+     the inline height would otherwise clip the map's own controls. */
+  .cb-idx { height: auto !important; min-height: 520px; }
+  .cb-idx > :not(script):not(style):not(link) { height: auto; min-height: 520px; }
+  .cb-idx--auto, .cb-idx--auto > :not(script):not(style):not(link) { min-height: 0; }
 }
 /* ------------------------------------------------------------ legal pages --- */
 .cb-legal-hero { position: relative; overflow: hidden; background: var(--color-canvas); border-bottom: 1px solid var(--color-hairline); }

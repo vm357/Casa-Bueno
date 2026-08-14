@@ -3,45 +3,6 @@
 
 const { Button } = window.ElevenLabsDesignSystem_2f7f30;
 
-function ListingsHeader() {
-  const [up, setUp] = React.useState(() => typeof document !== 'undefined' && document.hidden);
-  React.useEffect(() => {
-    const raf = requestAnimationFrame(() => setUp(true));
-    const t = setTimeout(() => setUp(true), 120);
-    return () => { cancelAnimationFrame(raf); clearTimeout(t); };
-  }, []);
-  const rise = (d) => ({
-    opacity: up ? 1 : 0, transform: up ? 'none' : 'translateY(18px)',
-    transition: `opacity .8s ease-out ${d}s, transform .8s ease-out ${d}s`,
-  });
-  return (
-    <section style={{ position: 'relative', background: 'var(--color-canvas)', overflow: 'hidden', borderBottom: '1px solid var(--color-hairline)' }}>
-      <style>{`
-@keyframes cbPulseSky{0%,100%{transform:translate(0,0) scale(1);opacity:.6}50%{transform:translate(-46px,34px) scale(1.12);opacity:.9}}
-@keyframes cbPulseMint{0%,100%{transform:translate(0,0) scale(1.08);opacity:.36}50%{transform:translate(52px,-30px) scale(.94);opacity:.62}}
-.cb-ls-orb-a{animation:cbPulseSky 24s ease-in-out infinite}
-.cb-ls-orb-b{animation:cbPulseMint 24s ease-in-out infinite;animation-delay:-12s}
-@media (prefers-reduced-motion: reduce){.cb-ls-orb-a,.cb-ls-orb-b{animation:none}}
-`}</style>
-      <div aria-hidden className="cb-ls-orb-a" style={{
-        position: 'absolute', right: '-6%', top: '-40%', width: 640, height: 640,
-        background: `radial-gradient(circle at center, ${window.ORB_STOPS.sky} 0%, ${window.ORB_STOPS.sky} 22%, rgba(245,245,245,0) 72%)`,
-        filter: 'blur(30px)', opacity: 0.68, pointerEvents: 'none',
-      }} />
-      <div aria-hidden className="cb-ls-orb-b" style={{
-        position: 'absolute', left: '-10%', bottom: '-55%', width: 560, height: 560,
-        background: `radial-gradient(circle at center, ${window.ORB_STOPS.mint} 0%, ${window.ORB_STOPS.mint} 22%, rgba(245,245,245,0) 72%)`,
-        filter: 'blur(34px)', opacity: 0.42, pointerEvents: 'none',
-      }} />
-      <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: '88px var(--space-lg) var(--space-xxl)', position: 'relative', display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
-        <div style={rise(0)}><SectionHead eyebrow="The listings" title="Homes across New Jersey." intro="Browse what's on the market now across Montclair, Millburn, the Oranges and beyond. New listings added every week." maxWidth={620} /></div>
-        {/* The hero search bar filtered the curated grid, which the live IDX feed
-            replaced; the real search now lives in the section below. */}
-      </div>
-    </section>
-  );
-}
-
 
 /* Live MLS listings, replacing the curated grid that used to sit here. IDX
  * queries the MLS on load, so new listings appear and sold ones drop off with no
@@ -56,12 +17,20 @@ function Reveal({ children, style }) {
   React.useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (typeof IntersectionObserver === 'undefined') { setShown(true); return; }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { setShown(true); io.disconnect(); } });
-    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
-    io.observe(el);
-    return () => io.disconnect();
+    /* The observer only drives the animation — it must never be the only route to
+       visible. It can exist, construct fine and still never deliver entries (seen
+       in embedded/preview frames), so a rect check runs immediately and a timer
+       reveals unconditionally as a last resort. */
+    if (el.getBoundingClientRect().top < window.innerHeight) { setShown(true); return; }
+    const timer = setTimeout(() => setShown(true), 1200);
+    let io;
+    if (typeof IntersectionObserver === 'function') {
+      io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { clearTimeout(timer); setShown(true); io.disconnect(); } });
+      }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+      io.observe(el);
+    }
+    return () => { clearTimeout(timer); if (io) io.disconnect(); };
   }, []);
   /* State-driven rather than classList.add: the IDX widgets mounting and resizing
      re-render this subtree, and a hard-coded className would wipe the class. */
@@ -106,13 +75,18 @@ function ListingsFeed() {
 /* Live MLS search. Results open on Vanessa's IDX subdomain, which is what the MLS
  * licenses the display through. */
 function ListingsSearch() {
+  /* On-load rise rather than a scroll reveal: this is the page hero, so it is
+     already in view. Starts hidden only once mounted, so no-JS still shows it. */
+  const [up, setUp] = React.useState(false);
+  React.useEffect(() => { const r = requestAnimationFrame(() => setUp(true)); return () => cancelAnimationFrame(r); }, []);
+  const rise = (d) => ({ opacity: up ? 1 : 0, transform: up ? 'none' : 'translateY(20px)', transition: `opacity .85s ease-out ${d}s, transform .85s cubic-bezier(.22,.61,.36,1) ${d}s` });
   return (
-    <section id="search" className="cb-band" style={{ scrollMarginTop: 88, background: 'var(--color-canvas)', borderTop: '1px solid var(--color-hairline)' }}>
+    <section id="search" className="cb-band" style={{ scrollMarginTop: 88, background: 'var(--color-canvas)' }}>
       <PageBloom hue="lavender" x="6%" y="14%" size={620} opacity={0.5} drift />
       <PageBloom hue="sky" x="94%" y="88%" size={560} opacity={0.46} drift="alt" />
-      <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: 'var(--space-section) var(--space-lg)', display: 'flex', flexDirection: 'column', gap: 'var(--space-xxl)' }}>
-        <SectionHead align="center" eyebrow="Search the MLS" title="Search every home on the market." intro="Set your filters and see live listings across New Jersey — updated straight from the MLS." />
-        <IdxWidget id="4280" legacy label="Quick search" height="auto" />
+      <div style={{ maxWidth: 'var(--container-max)', margin: '0 auto', padding: '104px var(--space-lg) var(--space-section)', display: 'flex', flexDirection: 'column', gap: 'var(--space-xxl)' }}>
+        <div style={rise(0.05)}><SectionHead align="center" eyebrow="The listings" title="Search every home on the market." intro="Browse live listings across Montclair, Millburn, the Oranges and beyond — straight from the MLS, updated continuously." /></div>
+        <div style={rise(0.22)}><IdxWidget id="4280" legacy label="Quick search" height="auto" /></div>
       </div>
     </section>
   );
@@ -143,7 +117,6 @@ function ListingsPage() {
     <React.Fragment>
       <NavBar active="Listings" />
       <main id="cb-main">
-      <ListingsHeader />
       <ListingsSearch />
       <ListingsFeed />
       <ListingsCta />
