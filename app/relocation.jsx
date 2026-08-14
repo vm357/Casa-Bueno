@@ -2,7 +2,7 @@
 
 const { Button, Badge, GradientOrbCard, FeatureCard } = window.ElevenLabsDesignSystem_2f7f30;
 
-const RELOC_CLIPS = ['uploads/Video Project 3.mp4', 'uploads/Video Project 4.mp4'];
+const RELOC_CLIPS = ['assets/reloc-1.mp4', 'assets/reloc-2.mp4'];
 
 function RelocReel({ index }) {
   const refs = React.useRef([]);

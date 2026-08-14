@@ -87,7 +87,7 @@ file (git-ignored) as `FUB_API_KEY=...`.
 | `type="text/babel"` | plain `<script>` |
 | React development build | React production build (already swapped in the source) |
 
-Everything else — HTML, `app/site.css`, `assets/`, `uploads/`, the design
+Everything else — HTML, `app/site.css`, `assets/`, the design
 system in `_ds/`, `_headers` and `_redirects` — is copied through unchanged.
 The API handlers in `src/` are bundled into the Worker instead, so they are
 never served as files.

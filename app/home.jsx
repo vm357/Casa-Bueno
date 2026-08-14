@@ -105,10 +105,10 @@ function HeroEditorial({ t }) {
 
 /* Atmospheric — centered headline over a slow crossfading reel of property clips. */
 const HERO_CLIPS = [
-  'uploads/clips-1786061857991-9z7h.mp4',
-  'uploads/Video Project 1.mp4',
-  'uploads/Video Project 2.mp4',
-  'uploads/17224730-hd_1920_1080_30fps.mp4',
+  'assets/hero-1.mp4',
+  'assets/hero-2.mp4',
+  'assets/hero-3.mp4',
+  'assets/hero-4.mp4',
 ];
 
 function HeroReel({ index }) {
@@ -467,7 +467,7 @@ function About() {
           position: 'relative', aspectRatio: '4 / 5', borderRadius: 'var(--radius-xxl)', overflow: 'hidden',
           background: 'var(--color-surface-strong)', border: '1px solid var(--color-hairline)',
         }}>
-          <img src="uploads/vanessabueno.png" alt="Casa Bueno agent portrait"
+          <img src="assets/vanessa-bueno-portrait.png" alt="Casa Bueno agent portrait"
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 32%', display: 'block' }} />
         </div>
         </Reveal>

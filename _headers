@@ -7,9 +7,6 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-/uploads/*
-  Cache-Control: public, max-age=31536000, immutable
-
 /_ds/*
   Cache-Control: public, max-age=31536000, immutable
 
