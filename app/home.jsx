@@ -628,7 +628,7 @@ function Contact() {
               {err ? <span role="alert" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', color: 'var(--color-body-strong)' }}>{err}</span> : null}
               <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginTop: 'var(--space-xs)', cursor: 'pointer', padding: '6px 0' }}>
                 <input type="checkbox" name="consent" required checked={consent} onChange={(e) => setConsent(e.target.checked)} style={{ width: 20, height: 20, marginTop: 1, flexShrink: 0, accentColor: 'var(--color-ink)', cursor: 'pointer' }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', lineHeight: 1.55, color: 'var(--color-body)' }}>{CB_CONSENT_TEXT}{' '}<a href="Terms-Conditions.html" style={{ color: 'var(--color-ink)', textDecoration: 'underline', textUnderlineOffset: 2 }}>Privacy Policy</a>.</span>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', lineHeight: 1.55, color: 'var(--color-body)' }}>{CB_CONSENT_TEXT}{' '}<a href="Terms-Conditions.html" style={{ color: 'var(--color-ink)', textDecoration: 'underline', textUnderlineOffset: 2 }}>Privacy Policy & Terms and Conditions</a>.</span>
               </label>
               <span className="cb-cta-aura" style={{ width: '100%', marginTop: 'var(--space-xs)' }}><Button type="submit" variant="primary" size="lg" disabled={busy || !consent} style={{ width: '100%' }}>{busy ? 'Sending\u2026' : 'Send message'}</Button></span>
             </form>

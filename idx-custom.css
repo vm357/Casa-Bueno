@@ -1,71 +1,43 @@
 /* Casa Bueno — IDX Broker Custom CSS.
-   Paste below the existing #IDX-main rule in Design > Custom CSS, in BOTH
-   Global > Desktop and Global > Mobile.
+   Paste into Design > Custom CSS, in BOTH Global > Desktop and Global > Mobile.
+   REPLACE the whole box — the earlier, longer paste is obsolete.
 
-   IDX's own stylesheet is not loading on wrapper-served pages, so this file has
-   to do two jobs: hide the containers IDX assumes are hidden, and style the
-   search form. Selectors come from the live markup on
-   search.sellwithbueno.com/idx/search/advanced. */
+   The current search template carries its own form layout and control styling, so
+   this file no longer restyles the form: it only patches what the template cannot
+   do for itself, plus type inheritance so the fonts match the site.
+
+   Scope note: on a STATIC wrapper there is no #IDX-main element — IDX injects its
+   output between the Header HTML and Footer HTML fields, inside our #idx-content
+   div. Rules are written accordingly. */
 
 /* 1. Hidden data containers. IDX prints its config as JSON into these divs and
-   relies on .IDX-hide to keep them out of view. Hidden by id rather than by the
-   class itself: #IDX-searchPageWrapper also carries IDX-hide and is unhidden by
-   their JS, so a blanket .IDX-hide rule would blank the whole page. */
+   relies on .IDX-hide, which is defined in IDX's own stylesheet — and that sheet
+   does not load on wrapper-served pages. Redefined here. The page wrapper is
+   exempted: it also carries IDX-hide and is un-hidden by their JS, so hiding the
+   class blindly would blank the entire page. */
+.IDX-hide:not(#IDX-searchPageWrapper):not(#IDX-main):not(#idxStart):not(#idxStop){display:none!important}
 #IDX-pageSettings,#IDX-cczListRules,#IDX-mlsList,#IDX-modifySearchData,#IDX-defaultPriceData,#IDX-editSavedSearch,#IDX-ccz{display:none!important}
-#IDX-main input.IDX-hide,#IDX-main .IDX-recaptchaToken{display:none!important}
-/* Their loading indicator never resolves without their JS, so it would otherwise
-   sit on the page reading "Loading" forever. */
-#IDX-loadingScreen{display:none!important}
-#IDX-advancedSearchFields:empty{display:none}
 
-/* 2. Type and rhythm. */
-#IDX-main{font-family:var(--font-body,'Inter',system-ui,sans-serif);color:var(--color-body,#44403c);font-size:15px;line-height:1.6}
-#IDX-main h1,#IDX-main h2,#IDX-main h3,#IDX-main .IDX-advanced-fields__title{font-family:var(--font-display,'EB Garamond',Georgia,serif);font-weight:var(--weight-display,300);color:var(--color-ink,#0c0a09);letter-spacing:-.4px;font-size:22px;margin:32px 0 16px}
+/* 2. The city/county/postal-code field is a native multi-select until select2
+   replaces it. Before that swap it renders at its intrinsic size and overlaps the
+   fields beside it. Constraining the real ids (#IDX-ccz-group / #IDX-ccz-select)
+   keeps it in flow either way. */
+#IDX-ccz-group,#IDX-ccz-group .IDX-controls{width:100%;position:static;float:none}
+#IDX-ccz-select{width:100%;max-height:160px}
 
-/* 3. Search-type nav: Advanced Search / Listing ID / Address / Map Search. */
-.IDX-precision-navbar .IDX-nav-items-container{display:flex;flex-wrap:wrap;gap:8px}
-.IDX-precision-navbar hr{display:none}
-.IDX-searchNavLink{display:inline-block;padding:9px 18px;border:1px solid var(--color-hairline,#e7e5e4);border-radius:var(--radius-pill,9999px);font-size:14px;text-decoration:none;color:var(--color-ink,#0c0a09);background:#fff}
-.IDX-searchNavLink:hover{border-color:var(--color-hairline-strong,#d6d3d1);text-decoration:none}
-.IDX-searchNavItem.IDX-active .IDX-searchNavLink{background:var(--color-primary,#0c0a09);border-color:var(--color-primary,#0c0a09);color:var(--color-canvas,#f5f5f5)}
+/* 3. The loading spinner never resolves on wrapped pages, so it sits over the
+   form indefinitely. */
+#IDX-loadingScreen,.IDX-loading,.IDX-loadingScreen{display:none!important}
 
-/* 4. The form itself: IDX emits one .IDX-control-group per field, so a grid over
-   the field container lays the whole form out without per-field rules. */
-#IDX-coreSearchFields{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px 24px;margin:32px 0}
-.IDX-location-group{grid-column:1/-1}
-.IDX-control-group{min-width:0}
-.IDX-title--PL{display:block;font-size:13px;color:var(--color-muted,#78716c);margin:0 0 6px}
-#IDX-main select,#IDX-main input[type="text"],#IDX-main input[type="number"],#IDX-main input[type="email"]{width:100%;box-sizing:border-box;padding:10px 12px;font-family:inherit;font-size:15px;color:var(--color-ink,#0c0a09);background:#fff;border:1px solid var(--color-hairline-strong,#d6d3d1);border-radius:var(--radius-sm,8px)}
-#IDX-main select[multiple]{height:auto;min-height:96px;padding:6px}
-#IDX-main select:focus,#IDX-main input:focus{outline:none;border-color:var(--color-ink,#0c0a09);box-shadow:0 0 0 1px var(--color-ink,#0c0a09)}
+/* 4. Type inheritance, so IDX's controls read as part of the site. Deliberately
+   light: no sizing or spacing here, to leave the template's own layout alone. */
+#idx-content{font-family:var(--font-body,'Inter',system-ui,sans-serif);color:var(--color-body,#44403c)}
+#idx-content h1,#idx-content h2,#idx-content h3{font-family:var(--font-display,'EB Garamond',Georgia,serif);font-weight:var(--weight-display,300);color:var(--color-ink,#0c0a09);letter-spacing:-.4px}
+#idx-content input,#idx-content select,#idx-content button,#idx-content textarea{font-family:inherit}
+#idx-content a{color:var(--color-ink,#0c0a09)}
+#idx-content a:hover{color:var(--color-ink,#0c0a09)}
 
-/* 5. Submit. */
-#IDX-action-buttons{margin:8px 0 32px}
-#IDX-main .IDX-btn,#IDX-main button[type="submit"]{display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;font-family:inherit;font-size:15px;font-weight:500;color:var(--color-canvas,#f5f5f5);background:var(--color-primary,#0c0a09);border:0;border-radius:var(--radius-pill,9999px);cursor:pointer}
-#IDX-main .IDX-btn:hover,#IDX-main button[type="submit"]:hover{background:var(--color-primary-active,#000)}
-
-/* 6. Results and detail pages share these primitives. */
-#IDX-main a{color:var(--color-ink,#0c0a09)}
-#IDX-main a:hover{color:var(--color-ink,#0c0a09);text-decoration:underline}
-#IDX-main table{border-collapse:collapse;width:100%}
-#IDX-main td,#IDX-main th{padding:8px 10px;border-bottom:1px solid var(--color-hairline,#e7e5e4);text-align:left}
-#IDX-main img{max-width:100%;height:auto}
-#IDX-main .IDX-disclaimer,#IDX-main .IDX-mlsDisclaimer{font-size:12px;line-height:1.5;color:var(--color-muted,#78716c)}
-/* 7. Listing detail pages. IDX's photo carousel and detail tables size themselves
-   in fixed pixels and rely on IDX's own stylesheet to constrain them. With that
-   stylesheet missing, the gallery renders at its intrinsic width and pushes the
-   page into horizontal scroll. Everything here is defensive width clamping. */
-#IDX-main,#IDX-main *{max-width:100%}
-#IDX-main{overflow-x:hidden}
-#IDX-detailsGallery,#IDX-galleryWrap,.IDX-detailsGallery,.IDX-photoGallery,#IDX-photoGallery{width:100%!important;max-width:100%!important;overflow:hidden}
-/* The large photo: contain rather than crop, so nothing is cut off. */
-#IDX-detailsGallery img,.IDX-detailsGallery img,#IDX-photoGallery img,.IDX-photo img,#IDX-main .IDX-detailsSlideshow img{width:100%!important;height:auto!important;max-height:64vh;object-fit:contain;background:var(--color-hairline,#e7e5e4);border-radius:var(--radius-md,12px)}
-/* Thumbnail strip scrolls on its own axis instead of widening the page. */
-#IDX-detailsThumbs,.IDX-detailsThumbs,.IDX-galleryThumbs{display:flex;gap:8px;overflow-x:auto;padding:8px 0;width:100%}
-#IDX-detailsThumbs img,.IDX-detailsThumbs img,.IDX-galleryThumbs img{width:88px!important;height:64px!important;object-fit:cover;border-radius:var(--radius-sm,8px);flex:0 0 auto}
-/* Detail tables and their wrappers are the other common source of overflow. */
-#IDX-main table{table-layout:fixed;width:100%}
-#IDX-main td,#IDX-main th{overflow-wrap:break-word}
-#IDX-main iframe,#IDX-main embed,#IDX-main object{max-width:100%}
-/* IDX floats detail columns; without their clears the layout stacks awkwardly. */
-#IDX-detailsWrapper,.IDX-detailsWrapper{overflow:hidden}
+/* 5. Nothing should be able to push the page sideways. */
+#idx-content{overflow-x:hidden}
+#idx-content img,#idx-content iframe,#idx-content embed,#idx-content object{max-width:100%}
+#idx-content table{max-width:100%}
