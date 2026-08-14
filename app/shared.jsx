@@ -18,12 +18,6 @@ const CB_NAV = [
 { label: 'Contact', href: 'index.html#contact' }];
 
 
-/* Live listings — Garden State MLS via sellwithbueno.idxbroker.com (Essex County, NJ,
- * 2+ beds, newest first). Photos served from IDX's S3 bucket. */
-const IDX_PHOTO = 'https://s3.amazonaws.com/idx-listing-photos/photos/';
-const IDX_DETAIL = 'https://sellwithbueno.idxbroker.com/idx/details/listing/c118/';
-/* Listings data lives in app/listings-data.js — loaded only on pages that need it. */
-const CB_LISTINGS = window.CB_LISTINGS || [];
 
 const CB_ORB_CYCLE = ['mint', 'peach', 'lavender', 'sky', 'rose'];
 
@@ -359,93 +353,6 @@ function SearchBar({ style = {}, elevated = true, onSearch }) {
 
 }
 
-/* ------------------------------------------------------------ listing card --- */
-
-function ListingPhoto({ orb = 'mint', img, tag, openHouse, height = 220 }) {
-  const stop = ORB_STOPS[orb] || ORB_STOPS.mint;
-  const [failed, setFailed] = React.useState(false);
-  const showImg = img && !failed;
-  return (
-    <div style={{
-      position: 'relative', height, borderRadius: 'var(--radius-lg)', overflow: 'hidden',
-      background: 'var(--color-surface-strong)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center'
-    }}>
-      {showImg ?
-      <img src={IDX_PHOTO + img + '/c118'} alt="" loading="lazy" onError={() => setFailed(true)}
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} /> :
-
-      <React.Fragment>
-          <div aria-hidden style={{
-          position: 'absolute', inset: 0,
-          background: `radial-gradient(120% 90% at 70% 15%, ${stop} 0%, rgba(255,255,255,0) 60%)`,
-          opacity: 0.5
-        }} />
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--color-muted-soft)"
-        strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden style={{ position: 'relative' }}>
-            <path d="M3 9.5 12 3l9 6.5" /><path d="M5 9v11h14V9" /><path d="M9 20v-6h6v6" />
-          </svg>
-        </React.Fragment>
-      }
-      {tag && <span style={{
-        position: 'absolute', top: 12, left: 12,
-        fontFamily: 'var(--font-body)', fontSize: 'var(--type-caption-up-size)',
-        fontWeight: 'var(--weight-semibold)', letterSpacing: 'var(--type-caption-up-ls)',
-        textTransform: 'uppercase', color: 'var(--color-ink)',
-        background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(4px)',
-        padding: '5px 11px', borderRadius: 'var(--radius-pill)'
-      }}>{tag}</span>}
-      {openHouse && <span style={{
-        position: 'absolute', bottom: 12, left: 12,
-        fontFamily: 'var(--font-body)', fontSize: 'var(--type-caption-size)',
-        fontWeight: 'var(--weight-medium)', color: 'var(--color-on-primary)',
-        background: 'rgba(12,10,9,0.82)', backdropFilter: 'blur(4px)',
-        padding: '5px 11px', borderRadius: 'var(--radius-pill)'
-      }}>{openHouse}</span>}
-    </div>);
-
-}
-
-function ListingCard({ data, index = 0 }) {
-  const [hover, setHover] = React.useState(false);
-  const orb = CB_ORB_CYCLE[index % CB_ORB_CYCLE.length];
-  return (
-    <a href={IDX_DETAIL + data.id + '/' + data.photo} target="_blank" rel="noopener"
-    onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-    style={{
-      textDecoration: 'none', background: 'var(--color-surface-card)',
-      borderRadius: 'var(--radius-xl)',
-      border: `1px solid ${hover ? 'var(--color-hairline-strong)' : 'var(--color-hairline)'}`,
-      boxShadow: hover ? 'var(--shadow-soft)' : 'none',
-      padding: 'var(--space-sm)', display: 'flex', flexDirection: 'column', gap: 'var(--space-base)',
-      transition: 'box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease',
-      transform: hover ? 'translateY(-3px)' : 'none'
-    }}>
-      <ListingPhoto orb={orb} img={data.img} tag={data.status} openHouse={data.openHouse} />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xs)', padding: '0 var(--space-xs) var(--space-xs)' }}>
-        <span style={{
-          fontFamily: 'var(--font-display)', fontWeight: 'var(--weight-display)',
-          fontSize: 'var(--type-display-sm-size)', letterSpacing: '-0.2px', color: 'var(--color-ink)'
-        }}>{data.price}</span>
-        <span style={{
-          fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-strong-size)',
-          fontWeight: 'var(--weight-medium)', color: 'var(--color-body-strong)'
-        }}>{data.address}</span>
-        <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', color: 'var(--color-muted)' }}>{data.city}</span>
-        <div style={{
-          marginTop: 'var(--space-xs)', paddingTop: 'var(--space-sm)',
-          borderTop: '1px solid var(--color-hairline)',
-          display: 'flex', gap: 'var(--space-base)', flexWrap: 'wrap',
-          fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', color: 'var(--color-body)'
-        }}>
-          <span>{data.beds} bd</span><span style={{ color: 'var(--color-hairline-strong)' }}>·</span>
-          <span>{data.baths} ba</span>
-          {data.lot && <React.Fragment><span style={{ color: 'var(--color-hairline-strong)' }}>·</span><span>{data.lot}</span></React.Fragment>}
-        </div>
-      </div>
-    </a>);
-
-}
 
 /* ----------------------------------------------------------------- footer --- */
 
@@ -668,8 +575,8 @@ function cbPrimeClip(v) {
 function cbPrimeClips(videos) { (videos || []).forEach(cbPrimeClip); }
 
 Object.assign(window, {
-  CB_NAV, CB_LISTINGS, CB_TESTIMONIALS, ORB_STOPS, CB_ORB_CYCLE, IDX_PHOTO, IDX_DETAIL, CB_REDUCED_MOTION,
+  CB_NAV, CB_TESTIMONIALS, ORB_STOPS, CB_ORB_CYCLE, CB_REDUCED_MOTION,
   cbAttachClip, cbPrimeClip, cbPrimeClips, IdxWidget, IDX_HOST,
   PageBloom, Wordmark, NavBar, Eyebrow, SectionHead, Field, CBInput, CBSelect,
-  SearchBar, ListingPhoto, ListingCard, Footer
+  SearchBar, Footer
 });

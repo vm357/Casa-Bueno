@@ -404,7 +404,7 @@ function Featured() {
         <Reveal>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 'var(--space-lg)', flexWrap: 'wrap' }}>
           <SectionHead eyebrow="Featured listings" title="Homes on the market now." intro="Take a look at the hottest listing on the market!" />
-          <Button href="Listings.html" variant="outline">View all listings</Button>
+          <span className="cb-cta-aura"><Button href="Listings.html" variant="outline">View all listings</Button></span>
         </div>
         </Reveal>
         <IdxWidget id="149786" label="Featured listings slideshow" height="auto" />
