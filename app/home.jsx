@@ -407,13 +407,7 @@ function Featured() {
           <Button href="Listings.html" variant="outline">View all listings</Button>
         </div>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 'var(--space-lg)' }} className="cb-3up">
-          {window.CB_LISTINGS.slice(0, 3).map((d, i) => (
-            <Reveal key={d.id} delay={0.12 + i * 0.12} style={{ display: 'flex' }} className="cb-reveal-card">
-              <ListingCard data={d} index={i} />
-            </Reveal>
-          ))}
-        </div>
+        <IdxWidget id="149786" label="Featured listings slideshow" height="auto" />
       </div>
     </Band>
   );
@@ -623,7 +617,7 @@ function Contact() {
                 <Field label="Last name"><CBInput required name="lastName" autoComplete="family-name" placeholder="Realtor" /></Field>
               </div>
               <Field label="Email"><CBInput required name="email" type="email" autoComplete="email" placeholder="you@email.com" /></Field>
-              <Field label="Phone"><CBInput name="phone" type="tel" autoComplete="tel" placeholder="(732) 631-3267" /></Field>
+              <Field label="Phone"><CBInput required name="phone" type="tel" autoComplete="tel" placeholder="(732) 631-3267" /></Field>
               <Field label="I'm interested in">
                 <CBSelect name="interest" options={[{ value: 'Seller Inquiry', label: 'Selling for cash' }, { value: 'Buyer Inquiry', label: 'Buying a home' }, { value: 'Relocation Inquiry', label: 'Relocating' }, { value: 'First-Time Buyer Inquiry', label: 'First-time buying' }]} defaultValue="Seller Inquiry" />
               </Field>
@@ -634,7 +628,7 @@ function Contact() {
               {err ? <span role="alert" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', color: 'var(--color-body-strong)' }}>{err}</span> : null}
               <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginTop: 'var(--space-xs)', cursor: 'pointer', padding: '6px 0' }}>
                 <input type="checkbox" name="consent" required checked={consent} onChange={(e) => setConsent(e.target.checked)} style={{ width: 20, height: 20, marginTop: 1, flexShrink: 0, accentColor: 'var(--color-ink)', cursor: 'pointer' }} />
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', lineHeight: 1.55, color: 'var(--color-body)' }}>{CB_CONSENT_TEXT}{' '}Please refer to{' '}<a href="Privacy.html" style={{ color: 'var(--color-ink)', textDecoration: 'underline', textUnderlineOffset: 2 }}>Privacy Policy</a>{' & '}<a href="Terms.html" style={{ color: 'var(--color-ink)', textDecoration: 'underline', textUnderlineOffset: 2 }}>Terms and Conditions</a></span>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', lineHeight: 1.55, color: 'var(--color-body)' }}>{CB_CONSENT_TEXT}{' '}<a href="Terms-Conditions.html" style={{ color: 'var(--color-ink)', textDecoration: 'underline', textUnderlineOffset: 2 }}>Privacy Policy</a>.</span>
               </label>
               <span className="cb-cta-aura" style={{ width: '100%', marginTop: 'var(--space-xs)' }}><Button type="submit" variant="primary" size="lg" disabled={busy || !consent} style={{ width: '100%' }}>{busy ? 'Sending\u2026' : 'Send message'}</Button></span>
             </form>

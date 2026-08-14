@@ -19,7 +19,7 @@ const ROOT = process.cwd();
 const DIST = path.join(ROOT, 'dist');
 
 const PAGES = ['404.html', 'About.html', 'Buy-Sell.html', 'index.html', 'Listings.html',
-  'Privacy.html', 'Relocation.html', 'Reviews.html', 'Terms.html', 'Accessibility.html'];
+  'Privacy.html', 'Relocation.html', 'Reviews.html', 'Terms.html', 'Terms-Conditions.html', 'Accessibility.html'];
 
 // Cloudflare reads _headers and _redirects from the root of the deployed
 // directory, so they have to land inside dist/. The API handlers are bundled

@@ -315,6 +315,13 @@ function CBSelect({ options, ...rest }) {
 const PRICE_MIN = ['No min', '$200k', '$300k', '$400k', '$500k', '$750k'].map((l, i) => ({ value: i, label: l }));
 const PRICE_MAX = ['No max', '$300k', '$400k', '$500k', '$750k', '$1M+'].map((l, i) => ({ value: i, label: l }));
 const COUNT_OPTS = ['Any', '1+', '2+', '3+', '4+', '5+'].map((l, i) => ({ value: i, label: l }));
+/* Matched against a listing's `propType`. Values mirror the MLS wording IDX uses,
+ * so the same list can drive an IDX-backed search later. The filter is skipped
+ * when no listing carries a propType, so it never blanks the grid. */
+const PROPERTY_TYPES = [{ value: '', label: 'All types' },
+{ value: 'Single Family', label: 'Single Family' },
+{ value: 'Condo', label: 'Condo' },
+{ value: 'Multi-Family', label: 'Multi-Family' }];
 const PRICE_MIN_VALUES = [0, 200000, 300000, 400000, 500000, 750000];
 const PRICE_MAX_VALUES = [Infinity, 300000, 400000, 500000, 750000, Infinity];
 
@@ -326,11 +333,12 @@ function SearchBar({ style = {}, elevated = true, onSearch }) {
   const [max, setMax] = React.useState(0);
   const [beds, setBeds] = React.useState(0);
   const [baths, setBaths] = React.useState(0);
+  const [ptype, setPtype] = React.useState('');
 
   const submit = (e) => {
     e.preventDefault();
     if (onSearch) {
-      onSearch({ loc: loc.trim(), min: PRICE_MIN_VALUES[min], max: PRICE_MAX_VALUES[max], beds, baths });
+      onSearch({ loc: loc.trim(), min: PRICE_MIN_VALUES[min], max: PRICE_MAX_VALUES[max], beds, baths, ptype });
     } else {
       window.location.href = 'Listings.html';
     }
@@ -668,6 +676,7 @@ function cbPrimeClip(v) {
 function cbPrimeClips(videos) { (videos || []).forEach(cbPrimeClip); }
 
 Object.assign(window, {
+  PROPERTY_TYPES,
   CB_NAV, CB_LISTINGS, CB_TESTIMONIALS, ORB_STOPS, CB_ORB_CYCLE, IDX_PHOTO, IDX_DETAIL, CB_REDUCED_MOTION,
   cbAttachClip, cbPrimeClip, cbPrimeClips, IdxWidget, IDX_HOST,
   PageBloom, Wordmark, NavBar, Eyebrow, SectionHead, Field, CBInput, CBSelect,

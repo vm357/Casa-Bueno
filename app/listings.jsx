@@ -139,6 +139,7 @@ function ListingsGrid({ search }) {
       if (search.max !== Infinity) arr = arr.filter((d) => num(d.price) <= search.max);
       if (search.beds) arr = arr.filter((d) => d.beds >= search.beds);
       if (search.baths) arr = arr.filter((d) => parseFloat(d.baths) >= search.baths);
+      if (search.ptype && arr.some((d) => d.propType)) arr = arr.filter((d) => d.propType === search.ptype);
     }
     // quick chips
     if (active === 'Active') arr = arr.filter((d) => d.status === 'Active');

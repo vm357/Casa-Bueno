@@ -68,6 +68,7 @@ a { -webkit-tap-highlight-color: transparent; }
 .cb-h-num::after { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--color-hairline-strong); vertical-align: middle; margin-left: 10px; }
 .cb-legal-body ul, .cb-legal-body ol { margin: 0 0 var(--space-base); padding-left: 22px; }
 .cb-legal-body li { margin-bottom: 8px; }
+.cb-legal-ol > li { margin-bottom: var(--space-base); }
 .cb-legal-body a { color: var(--color-ink); text-decoration: underline; text-underline-offset: 2px; text-decoration-color: var(--color-hairline-strong); transition: text-decoration-color .2s ease-out; }
 .cb-legal-body a:hover { text-decoration-color: var(--color-ink); }
 .cb-inshort { padding: 14px 18px; border-left: 2px solid var(--color-ink); background: var(--color-canvas-soft); border-radius: 0 var(--radius-md) var(--radius-md) 0; }

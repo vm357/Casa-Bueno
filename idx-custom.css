@@ -51,4 +51,21 @@
 #IDX-main td,#IDX-main th{padding:8px 10px;border-bottom:1px solid var(--color-hairline,#e7e5e4);text-align:left}
 #IDX-main img{max-width:100%;height:auto}
 #IDX-main .IDX-disclaimer,#IDX-main .IDX-mlsDisclaimer{font-size:12px;line-height:1.5;color:var(--color-muted,#78716c)}
-br.IDX-clear{display:none}
+/* 7. Listing detail pages. IDX's photo carousel and detail tables size themselves
+   in fixed pixels and rely on IDX's own stylesheet to constrain them. With that
+   stylesheet missing, the gallery renders at its intrinsic width and pushes the
+   page into horizontal scroll. Everything here is defensive width clamping. */
+#IDX-main,#IDX-main *{max-width:100%}
+#IDX-main{overflow-x:hidden}
+#IDX-detailsGallery,#IDX-galleryWrap,.IDX-detailsGallery,.IDX-photoGallery,#IDX-photoGallery{width:100%!important;max-width:100%!important;overflow:hidden}
+/* The large photo: contain rather than crop, so nothing is cut off. */
+#IDX-detailsGallery img,.IDX-detailsGallery img,#IDX-photoGallery img,.IDX-photo img,#IDX-main .IDX-detailsSlideshow img{width:100%!important;height:auto!important;max-height:64vh;object-fit:contain;background:var(--color-hairline,#e7e5e4);border-radius:var(--radius-md,12px)}
+/* Thumbnail strip scrolls on its own axis instead of widening the page. */
+#IDX-detailsThumbs,.IDX-detailsThumbs,.IDX-galleryThumbs{display:flex;gap:8px;overflow-x:auto;padding:8px 0;width:100%}
+#IDX-detailsThumbs img,.IDX-detailsThumbs img,.IDX-galleryThumbs img{width:88px!important;height:64px!important;object-fit:cover;border-radius:var(--radius-sm,8px);flex:0 0 auto}
+/* Detail tables and their wrappers are the other common source of overflow. */
+#IDX-main table{table-layout:fixed;width:100%}
+#IDX-main td,#IDX-main th{overflow-wrap:break-word}
+#IDX-main iframe,#IDX-main embed,#IDX-main object{max-width:100%}
+/* IDX floats detail columns; without their clears the layout stacks awkwardly. */
+#IDX-detailsWrapper,.IDX-detailsWrapper{overflow:hidden}
