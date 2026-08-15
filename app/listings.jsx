@@ -63,7 +63,7 @@ function ListingsFeed() {
             <SectionHead align="center" eyebrow="Go deeper" title="Every filter the MLS offers." intro="Narrow by subdivision, school, acreage and more, or page through the full list of active listings." />
             <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap', justifyContent: 'center' }}>
               <span className="cb-cta-aura"><Button href={'https://' + IDX_HOST + '/idx/search/advanced'} variant="primary" size="lg">Advanced search</Button></span>
-              <span className="cb-cta-aura"><Button href={'https://' + IDX_HOST + '/idx/results/listings'} variant="outline" size="lg">Browse all MLS listings</Button></span>
+              <span className="cb-cta-aura"><Button href={'https://' + IDX_HOST + '/i/north-central-nj-homes-for-sale'} variant="outline" size="lg">Browse all MLS listings</Button></span>
             </div>
           </Reveal>
         </Reveal>
