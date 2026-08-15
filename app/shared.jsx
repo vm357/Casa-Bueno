@@ -313,7 +313,8 @@ const PRICE_MIN_VALUES = [0, 200000, 300000, 400000, 500000, 750000];
 const PRICE_MAX_VALUES = [Infinity, 300000, 400000, 500000, 750000, Infinity];
 
 /* SearchBar — property search. When `onSearch` is given it filters in place;
- * otherwise it navigates to the listings page. */
+ * otherwise it hands the filters to IDX's advanced search rather than dropping
+ * them, which is what an empty navigation to Listings.html used to do. */
 function SearchBar({ style = {}, elevated = true, onSearch }) {
   const [loc, setLoc] = React.useState('');
   const [min, setMin] = React.useState(0);
@@ -325,9 +326,19 @@ function SearchBar({ style = {}, elevated = true, onSearch }) {
     e.preventDefault();
     if (onSearch) {
       onSearch({ loc: loc.trim(), min: PRICE_MIN_VALUES[min], max: PRICE_MAX_VALUES[max], beds, baths });
-    } else {
-      window.location.href = 'Listings.html';
+      return;
     }
+    /* IDX result-page query keys: lp/hp low and high price, bd bedrooms,
+     * tb total baths, a_cityName city. Unset filters are omitted so IDX applies
+     * its own defaults; unknown keys are ignored server-side. */
+    const q = new URLSearchParams();
+    if (PRICE_MIN_VALUES[min]) q.set('lp', PRICE_MIN_VALUES[min]);
+    if (Number.isFinite(PRICE_MAX_VALUES[max])) q.set('hp', PRICE_MAX_VALUES[max]);
+    if (beds) q.set('bd', beds);
+    if (baths) q.set('tb', baths);
+    if (loc.trim()) q.set('a_cityName[]', loc.trim());
+    const qs = q.toString();
+    window.location.href = 'https://' + IDX_HOST + '/idx/results/listings' + (qs ? '?' + qs : '');
   };
 
   return (

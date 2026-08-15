@@ -617,7 +617,7 @@ function Contact() {
                 <Field label="Last name"><CBInput required name="lastName" autoComplete="family-name" placeholder="Realtor" /></Field>
               </div>
               <Field label="Email"><CBInput required name="email" type="email" autoComplete="email" placeholder="you@email.com" /></Field>
-              <Field label="Phone"><CBInput required name="phone" type="tel" autoComplete="tel" placeholder="(732) 631-3267" /></Field>
+              <Field label="Phone (required)"><CBInput required name="phone" type="tel" autoComplete="tel" placeholder="(732) 631-3267" /></Field>
               <Field label="I'm interested in">
                 <CBSelect name="interest" options={[{ value: 'Seller Inquiry', label: 'Selling for cash' }, { value: 'Buyer Inquiry', label: 'Buying a home' }, { value: 'Relocation Inquiry', label: 'Relocating' }, { value: 'First-Time Buyer Inquiry', label: 'First-time buying' }]} defaultValue="Seller Inquiry" />
               </Field>
