@@ -308,7 +308,7 @@ function TrustRow() {
   const stats = [
     { n: '11 days', l: 'Average time to a signed cash offer' },
     { n: 'Millions of $', l: 'In closed sales across New Jersey' },
-    { n: 'international', l: 'Relocations handled, door to door' },
+    { n: 'International', l: 'Relocations handled, door to door' },
     { n: '4.9 / 5', l: 'Average client rating' },
   ];
   const ref = React.useRef(null);
