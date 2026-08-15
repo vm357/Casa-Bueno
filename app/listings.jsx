@@ -55,7 +55,7 @@ function ListingsFeed() {
           <PageBloom hue="rose" x="6%" y="18%" size={620} opacity={0.44} drift />
           <PageBloom hue="mint" x="94%" y="86%" size={560} opacity={0.4} drift="alt" />
           <SectionHead align="center" eyebrow="Search by map" title="Know the neighborhood, not just the house." intro="Pan and zoom to see what's for sale street by street. Draw your own boundary, or start from a town and work outward." />
-          <IdxWidget id="4283" kind="map" label="Map search" height={720} />
+          <IdxWidget id="149787" label="Map search" height={720} />
           {/* Out to IDX's own full-featured pages: every filter the MLS exposes,
               and the full paginated results list. Its own Reveal so it animates
               after the map, on a tighter gap than the section rhythm. */}
