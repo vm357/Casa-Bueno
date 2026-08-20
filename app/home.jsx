@@ -528,6 +528,7 @@ function Contact() {
   const [sent, setSent] = React.useState(false);
   const [busy, setBusy] = React.useState(false);
   const [err, setErr] = React.useState('');
+  const [consent, setConsent] = React.useState(false);
   /* Spam defence, no third-party captcha:
    *  1. a honeypot field only a bot would fill in
    *  2. a minimum time on the form — bots submit near-instantly
@@ -625,9 +626,12 @@ function Contact() {
                 <textarea rows={4} name="message" placeholder="Tell us a little about your home or your plans." style={{ ...window.cbTextareaStyle }} />
               </label>
               {err ? <span role="alert" style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', color: 'var(--color-body-strong)' }}>{err}</span> : null}
-              {/* Consent is now implied by submitting: the disclaimer stays as the
-                  notice, so the text still ships to FUB with the lead. */}
-              <p style={{ margin: 'var(--space-xs) 0 0', fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', lineHeight: 1.55, color: 'var(--color-body)' }}>{CB_CONSENT_TEXT}{' '}<a href="Privacy.html" style={{ color: 'var(--color-ink)', textDecoration: 'underline', textUnderlineOffset: 2 }}>Privacy Policy</a>{' & '}<a href="Terms-Conditions.html" style={{ color: 'var(--color-ink)', textDecoration: 'underline', textUnderlineOffset: 2 }}>Terms and Conditions</a>.</p>
+              {/* Optional: submitting is consent enough, so the box is unchecked by
+                  default and never blocks the send. The text still ships to FUB. */}
+              <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginTop: 'var(--space-xs)', cursor: 'pointer', padding: '6px 0' }}>
+                <input type="checkbox" name="consent" checked={consent} onChange={(e) => setConsent(e.target.checked)} style={{ width: 20, height: 20, marginTop: 1, flexShrink: 0, accentColor: 'var(--color-ink)', cursor: 'pointer' }} />
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--type-body-sm-size)', lineHeight: 1.55, color: 'var(--color-body)' }}>{CB_CONSENT_TEXT}{' '}<a href="Privacy.html" style={{ color: 'var(--color-ink)', textDecoration: 'underline', textUnderlineOffset: 2 }}>Privacy Policy</a>{' & '}<a href="Terms-Conditions.html" style={{ color: 'var(--color-ink)', textDecoration: 'underline', textUnderlineOffset: 2 }}>Terms and Conditions</a>.</span>
+              </label>
               <span className="cb-cta-aura" style={{ width: '100%', marginTop: 'var(--space-xs)' }}><Button type="submit" variant="primary" size="lg" disabled={busy} style={{ width: '100%' }}>{busy ? 'Sending\u2026' : 'Send message'}</Button></span>
             </form>
           )}
